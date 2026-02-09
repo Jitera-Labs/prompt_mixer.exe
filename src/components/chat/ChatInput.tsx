@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useLayoutEffect } from 'react';
 import { useChatStore } from '../../stores/chatStore';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { useMixerStore } from '../../stores/mixerStore';
@@ -15,7 +15,7 @@ export function ChatInput() {
   const setStatus = useMixerStore(s => s.setStatus);
 
   // Auto-resize textarea
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 150) + 'px';
@@ -154,7 +154,8 @@ export function ChatInput() {
         onKeyDown={handleKeyDown}
         placeholder="ENTER COMMAND..."
         rows={1}
-        className="flex-grow bg-transparent border-none outline-none text-[var(--nc-bright-white)] text-xl placeholder-[var(--nc-gray)] focus:ring-0 p-0 resize-none max-h-[150px]"
+        className="flex-grow bg-transparent border-none outline-none text-[var(--nc-bright-white)] text-xl placeholder-[var(--nc-gray)] focus:ring-0 p-0 resize-none"
+        style={{ height: '30px', maxHeight: '150px' }}
         disabled={isStreaming}
       />
       {isStreaming ? (
