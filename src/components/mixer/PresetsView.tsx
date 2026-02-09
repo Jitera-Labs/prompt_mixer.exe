@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Plus, Trash, FloppyDisk, PencilSimple, ArrowsClockwise } from '@phosphor-icons/react';
 import { useMixerStore } from '../../stores/mixerStore';
 import { showToast } from '../ui/Toast';
 import { IconRenderer } from '../ui/IconRenderer';
@@ -42,10 +41,10 @@ function AnchorForm({
             placeholder="Icon or Emoji"
           />
         </div>
-        <div style={{ marginLeft: 8, display: 'flex', alignItems: 'center' }}>
+        <div className="anchor-icon-preview">
           <IconRenderer icon={form.icon} />
         </div>
-        <div className="nc-field" style={{ marginLeft: 12 }}>
+        <div className="nc-field">
           <label className="anchor-form-label nc-label">Color</label>
           <input
             type="color"
@@ -56,7 +55,7 @@ function AnchorForm({
         </div>
       </div>
       <div className="anchor-form-row">
-        <div className="nc-field" style={{ flex: 1 }}>
+        <div className="nc-field flex-1">
           <label className="anchor-form-label nc-label">Label</label>
           <input
             className="anchor-form-input nc-input"
@@ -69,7 +68,7 @@ function AnchorForm({
         </div>
       </div>
       <div className="anchor-form-row">
-        <div className="nc-field" style={{ flex: 1 }}>
+        <div className="nc-field flex-1">
           <label className="anchor-form-label nc-label">Prompt</label>
           <textarea
             className="anchor-form-input anchor-form-textarea nc-input"
@@ -81,8 +80,8 @@ function AnchorForm({
         </div>
       </div>
       <div className="anchor-form-actions">
-        <button onClick={handleSubmit} className="anchor-form-btn anchor-form-btn-save nc-button">Save</button>
-        <button onClick={onCancel} className="anchor-form-btn anchor-form-btn-cancel nc-button nc-button-ghost">Cancel</button>
+        <button onClick={handleSubmit} className="nc-button">[SAVE]</button>
+        <button onClick={onCancel} className="nc-button nc-button-ghost">[CANCEL]</button>
       </div>
     </div>
   );
@@ -136,19 +135,26 @@ export function PresetsView() {
   };
 
   return (
-    <div className="nc-panel presets-view">
-      <div className="nc-header">ANCHORS_AND_PRESETS</div>
-      <div className="nc-section">
-        <div className="nc-section-title">Anchors</div>
-        <div className="nc-divider" />
-        <div className="anchor-section-actions">
+    <div className="presets-view h-full flex flex-col bg-[var(--nc-blue)]">
+      <div className="nc-section flex-grow overflow-y-auto custom-scrollbar">
+        <div className="nc-section-title flex justify-between items-center sticky top-0 bg-[var(--nc-blue)] z-10 pb-2 border-b border-[var(--nc-white)] mb-4">
+          <span>ANCHORS</span>
+          <button
+            onClick={() => setView('canvas')}
+            className="nc-button nc-button-ghost"
+            title="Close Presets View"
+          >
+            [X]
+          </button>
+        </div>
+        {/* Removed redundant divider since title has border */}
+        <div className="anchor-section-actions mb-4">
           <button
             onClick={() => resetPositions()}
             className="nc-button"
             title="Reset anchor positions to default circle layout"
           >
-            <ArrowsClockwise size={14} />
-            Reset Positions
+            [RESET POSITIONS]
           </button>
         </div>
 
@@ -171,17 +177,17 @@ export function PresetsView() {
                   <div className="anchor-list-actions">
                     <button
                       onClick={() => { setEditingIndex(i); setAddingAnchor(false); }}
-                      className="anchor-action-btn nc-button"
+                      className="anchor-action-btn nc-button nc-button-ghost"
                       title="Edit anchor"
                     >
-                      <PencilSimple size={14} />
+                      [EDIT]
                     </button>
                     <button
                       onClick={() => handleDeleteAnchor(i)}
-                      className="anchor-action-btn anchor-action-btn-delete nc-button"
+                      className="anchor-action-btn nc-button nc-button-ghost"
                       title="Delete anchor"
                     >
-                      <Trash size={14} />
+                      [DEL]
                     </button>
                   </div>
                 </div>
@@ -198,17 +204,16 @@ export function PresetsView() {
           ) : (
             <button
               onClick={() => { setAddingAnchor(true); setEditingIndex(null); }}
-              className="anchor-add-btn nc-button"
+              className="nc-button w-full"
             >
-              <Plus size={14} />
-              Add Anchor
+              [ADD ANCHOR]
             </button>
           )}
         </div>
       </div>
 
       <div className="nc-section">
-        <div className="nc-section-title">Presets</div>
+        <div className="nc-section-title">PRESETS</div>
         <div className="nc-divider" />
         {!showSaveInput ? (
           <div className="preset-actions">
@@ -216,17 +221,16 @@ export function PresetsView() {
               onClick={() => setShowSaveInput(true)}
               className="nc-button"
             >
-              <FloppyDisk size={14} />
-              Save Current
+              [SAVE CURRENT]
             </button>
           </div>
         ) : (
           <div className="nc-form">
             <div className="nc-field">
-              <label className="nc-label">Preset Name</label>
+              <label className="nc-label">PRESET NAME</label>
               <input
                 className="nc-input"
-                placeholder="Preset name..."
+                placeholder="PRESET NAME..."
                 value={newPresetName}
                 onChange={e => setNewPresetName(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') setShowSaveInput(false); }}
@@ -234,15 +238,15 @@ export function PresetsView() {
               />
             </div>
             <div className="preset-form-actions">
-              <button onClick={handleSave} className="nc-button">Save</button>
-              <button onClick={() => setShowSaveInput(false)} className="nc-button nc-button-ghost">Cancel</button>
+              <button onClick={handleSave} className="nc-button">[SAVE]</button>
+              <button onClick={() => setShowSaveInput(false)} className="nc-button nc-button-ghost">[CANCEL]</button>
             </div>
           </div>
         )}
 
         <div className="preset-list">
           {presets.length === 0 ? (
-            <div className="nc-label">No saved presets</div>
+            <div className="nc-label">NO SAVED PRESETS</div>
           ) : (
             presets.map(preset => (
               <div
@@ -259,7 +263,7 @@ export function PresetsView() {
                   className="nc-button nc-button-ghost"
                   title="Delete preset"
                 >
-                  <Trash size={16} />
+                  [DEL]
                 </button>
               </div>
             ))

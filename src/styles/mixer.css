@@ -140,48 +140,9 @@
 }
 
 .anchor-action-btn {
-  padding: 4px;
-  border: 1px solid var(--nc-bright-white);
-  background: var(--nc-blue);
-  color: var(--nc-bright-white);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: none;
-}
-
-.anchor-action-btn:hover {
-  background: var(--nc-cyan);
-  color: var(--nc-black);
-}
-
-.anchor-action-btn-delete:hover {
-  background: var(--nc-yellow);
-  color: var(--nc-black);
-}
-
-.anchor-add-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  border: 2px dashed var(--nc-bright-white);
-  background: transparent;
-  color: var(--nc-white);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: none;
-}
-
-.anchor-add-btn:hover {
-  background: var(--nc-cyan);
-  color: var(--nc-black);
-  border-color: var(--nc-bright-white);
+  padding: 2px 6px;
+  font-size: 14px;
+  min-width: unset;
 }
 
 /* Anchor Form - NC Style */
@@ -205,9 +166,6 @@
   color: var(--nc-yellow);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding-top: 7px;
-  min-width: 42px;
-  flex-shrink: 0;
 }
 
 .anchor-form-input {
@@ -255,43 +213,10 @@
   justify-content: flex-end;
 }
 
-.anchor-form-btn {
-  padding: 5px 14px;
-  border: 2px solid var(--nc-bright-white);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: none;
-}
-
-.anchor-form-btn-save {
-  background: var(--nc-cyan);
-  color: var(--nc-black);
-}
-
-.anchor-form-btn-save:hover {
-  background: var(--nc-yellow);
-}
-
-.anchor-form-btn-save:active {
-  transform: translate(1px, 1px);
-}
-
-/* Button shadow only when visual effects enabled */
-[data-visual-effects="true"] .anchor-form-btn-save {
-  box-shadow: 2px 2px 0 black;
-}
-
-[data-visual-effects="true"] .anchor-form-btn-save:active {
-  box-shadow: none;
-}
-
-.anchor-form-btn-cancel {
-  background: var(--nc-blue);
-  color: var(--nc-white);
-}
-
-.anchor-form-btn-cancel:hover {
-  background: var(--nc-cyan);
-  color: var(--nc-black);
+.anchor-icon-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 4px;
 }

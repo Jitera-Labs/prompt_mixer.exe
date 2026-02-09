@@ -6,6 +6,8 @@ export function MixerControls() {
   const speed = useMixerStore(s => s.speed);
   const togglePause = useMixerStore(s => s.togglePause);
   const toggleSpeed = useMixerStore(s => s.toggleSpeed);
+  const view = useMixerStore(s => s.view);
+  const setView = useMixerStore(s => s.setView);
   const enableVisualEffects = useSettingsStore(s => s.enableVisualEffects);
 
   const shadowClass = enableVisualEffects ? 'shadow-[2px_2px_0_black] active:shadow-none' : '';
@@ -23,6 +25,12 @@ export function MixerControls() {
         className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-[var(--nc-black)] py-0 px-1 cursor-pointer"
       >
         {speed === 'slow' ? '[SLOW]' : '[FAST]'}
+      </button>
+      <button
+        onClick={() => setView(view === 'canvas' ? 'presets' : 'canvas')}
+        className="bg-transparent border-none text-[var(--nc-yellow)] hover:bg-[var(--nc-yellow)] hover:text-[var(--nc-black)] py-0 px-1 cursor-pointer"
+      >
+        [{view === 'canvas' ? 'PRESETS' : 'CANVAS'}]
       </button>
     </div>
   );
