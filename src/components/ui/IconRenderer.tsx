@@ -1,14 +1,17 @@
 import { CSSProperties } from 'react';
+import { RETRO_ICONS } from '../../lib/canvas/ascii-art';
 
 // Map icon names to text/ASCII/Unicode representation
 // Using CP437-like characters or Unicode equivalents where appropriate for TUI feel
 const TEXT_ICONS: Record<string, string> = {
-  // Existing from icons.ts
-  Smiley: ':)',
-  Heart: '<3',
-  Fire: '^',
-  Star: '*',
-  Question: '?',
+  // Synced with RETRO_ICONS for consistency
+  Smiley: RETRO_ICONS.Smiley?.char || ':)',
+  Heart: RETRO_ICONS.Heart?.char || '<3',
+  Fire: RETRO_ICONS.Fire?.char || '^',
+  Star: RETRO_ICONS.Star?.char || '*',
+  Question: RETRO_ICONS.Question?.char || '?',
+
+  // Other mappings
   SmileyWink: ';)',
   Skull: '#',
   SmileyXEyes: 'X(',
