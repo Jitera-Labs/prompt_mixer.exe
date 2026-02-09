@@ -1,0 +1,297 @@
+/* Mixer Canvas Container - NC Style */
+.mixer-canvas {
+  cursor: pointer;
+  border: 2px dotted var(--nc-gray);
+}
+
+/* Floating Status - NC Style */
+.mixer-status {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
+  color: var(--nc-yellow);
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 1000;
+  background: var(--nc-blue);
+  border: 2px solid var(--nc-bright-white);
+  pointer-events: none;
+  text-shadow: none;
+}
+/* Connection Indicator - NC Style */
+.connection-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 12px;
+  height: 12px;
+  background-color: var(--nc-gray);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.connection-indicator.connected {
+  background-color: var(--nc-cyan);
+}
+
+.connection-indicator.error {
+  background-color: var(--nc-yellow);
+}
+
+/* Glow effects only when visual effects enabled */
+[data-visual-effects="true"] .connection-indicator {
+  box-shadow: 0 0 5px var(--nc-gray);
+}
+
+[data-visual-effects="true"] .connection-indicator.connected {
+  box-shadow: 0 0 12px var(--nc-cyan);
+}
+
+[data-visual-effects="true"] .connection-indicator.error {
+  box-shadow: 0 0 12px var(--nc-yellow);
+}
+
+/* Presets View - NC Style */
+.presets-list {
+  padding: 12px;
+}
+
+.preset-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: transparent;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: none;
+  border: 1px solid transparent;
+}
+
+.preset-item:hover {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}
+
+.preset-item.active {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+  border: 1px solid var(--nc-bright-white);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  /* NC styling doesn't need grid changes */
+}
+
+/* Anchor List - NC Style */
+.anchor-list {
+  padding: 12px;
+  overflow-y: auto;
+  max-height: 320px;
+  border-bottom: 2px solid var(--nc-bright-white);
+}
+
+.anchor-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  background: transparent;
+  margin-bottom: 2px;
+  transition: none;
+  cursor: pointer;
+}
+
+.anchor-list-item:hover {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}
+
+.anchor-list-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.anchor-list-swatch {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid var(--nc-bright-white);
+}
+
+.anchor-list-label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.anchor-list-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.anchor-action-btn {
+  padding: 4px;
+  border: 1px solid var(--nc-bright-white);
+  background: var(--nc-blue);
+  color: var(--nc-bright-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: none;
+}
+
+.anchor-action-btn:hover {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}
+
+.anchor-action-btn-delete:hover {
+  background: var(--nc-yellow);
+  color: var(--nc-black);
+}
+
+.anchor-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 2px dashed var(--nc-bright-white);
+  background: transparent;
+  color: var(--nc-white);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: none;
+}
+
+.anchor-add-btn:hover {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+  border-color: var(--nc-bright-white);
+}
+
+/* Anchor Form - NC Style */
+.anchor-form {
+  padding: 12px;
+  margin-bottom: 6px;
+  background: var(--nc-blue);
+  border: 2px solid var(--nc-bright-white);
+}
+
+.anchor-form-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.anchor-form-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--nc-yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-top: 7px;
+  min-width: 42px;
+  flex-shrink: 0;
+}
+
+.anchor-form-input {
+  flex: 1;
+  background: var(--nc-black);
+  border: 1px solid var(--nc-bright-white);
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--nc-bright-white);
+  outline: none;
+  transition: none;
+  font-family: inherit;
+}
+
+.anchor-form-input:focus {
+  border-color: var(--nc-cyan);
+}
+
+.anchor-form-icon-input {
+  max-width: 52px;
+  text-align: center;
+  font-size: 18px;
+  padding: 4px;
+}
+
+.anchor-form-color {
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid var(--nc-bright-white);
+  background: var(--nc-black);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.anchor-form-textarea {
+  resize: vertical;
+  min-height: 56px;
+  line-height: 1.45;
+}
+
+.anchor-form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.anchor-form-btn {
+  padding: 5px 14px;
+  border: 2px solid var(--nc-bright-white);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: none;
+}
+
+.anchor-form-btn-save {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}
+
+.anchor-form-btn-save:hover {
+  background: var(--nc-yellow);
+}
+
+.anchor-form-btn-save:active {
+  transform: translate(1px, 1px);
+}
+
+/* Button shadow only when visual effects enabled */
+[data-visual-effects="true"] .anchor-form-btn-save {
+  box-shadow: 2px 2px 0 black;
+}
+
+[data-visual-effects="true"] .anchor-form-btn-save:active {
+  box-shadow: none;
+}
+
+.anchor-form-btn-cancel {
+  background: var(--nc-blue);
+  color: var(--nc-white);
+}
+
+.anchor-form-btn-cancel:hover {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}

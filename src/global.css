@@ -1,0 +1,499 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Geist Pixel';
+  src: url('https://cdn.jsdelivr.net/gh/vercel/geist-font@main/fonts/GeistPixel/webfonts/GeistPixel-Square.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Norton Commander Color Palette */
+:root {
+  /* --nc-blue: #0000AA; */
+  --nc-blue: #000000;
+  --nc-cyan: #00AAAA;
+  --nc-yellow: #FFFF55;
+  --nc-white: #AAAAAA;
+  --nc-bright-white: #FFFFFF;
+  --nc-black: #000000;
+  --nc-gray: #AAAAAA;
+  --nc-border: var(--nc-bright-white);
+  --nc-panel-bg: var(--nc-blue);
+  --nc-panel-text: var(--nc-white);
+  --nc-accent: var(--nc-cyan);
+  --nc-warn: var(--nc-yellow);
+  --nc-pad-sm: 6px;
+  --nc-pad-md: 12px;
+  --nc-pad-lg: 16px;
+  --nc-gap: 12px;
+  --nc-line: 2px;
+}
+
+:root[data-theme="light"] {
+  --nc-blue: #F0F0F0;
+  --nc-cyan: #000088;
+  --nc-yellow: #AA0000;
+  --nc-white: #333333;
+  --nc-bright-white: #000000;
+  --nc-black: #FFFFFF;
+  --nc-gray: #888888;
+  --nc-border: var(--nc-bright-white);
+  --nc-panel-bg: var(--nc-black);
+  --nc-panel-text: var(--nc-white);
+  --nc-accent: var(--nc-cyan);
+  --nc-warn: var(--nc-yellow);
+}
+
+/* Base styles */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--nc-black);
+  color: var(--nc-white);
+  font-family: 'Geist Pixel', monospace;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+body {
+  background: var(--nc-black);
+  color: var(--nc-white);
+  font-family: 'Geist Pixel', monospace;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+/* Selection */
+::selection {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}
+
+/* Norton Commander Reusable Classes */
+.nc-panel {
+  background: var(--nc-panel-bg);
+  border: 4px double var(--nc-border);
+  padding: 16px;
+}
+
+
+
+/* Box-shadow only when visual effects enabled */
+[data-visual-effects="true"] .nc-panel {
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.nc-header {
+  background: var(--nc-panel-bg);
+  color: var(--nc-yellow);
+  padding: 4px 12px;
+  margin-top: -24px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  border: 2px solid var(--nc-border);
+  position: relative;
+  width: fit-content;
+  z-index: 10;
+}
+
+.nc-highlight {
+  background: var(--nc-cyan);
+  color: var(--nc-black);
+}
+
+/* Norton Commander Layout and Form Utilities */
+.nc-screen {
+  min-height: 100vh;
+  background: var(--nc-black);
+  color: var(--nc-panel-text);
+}
+
+.nc-screen-scroll {
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--nc-black);
+  color: var(--nc-panel-text);
+}
+
+.nc-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nc-gap);
+  padding: var(--nc-pad-lg);
+  box-sizing: border-box;
+}
+
+.nc-columns {
+  display: flex;
+  gap: var(--nc-gap);
+  align-items: stretch;
+}
+
+.nc-column {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.nc-section {
+  background: var(--nc-panel-bg);
+  border: 4px double var(--nc-border);
+  padding: var(--nc-pad-lg);
+  color: var(--nc-panel-text);
+}
+
+.nc-section-title {
+  display: inline-block;
+  background: var(--nc-panel-bg);
+  color: var(--nc-warn);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: 2px 10px;
+  margin-bottom: var(--nc-pad-md);
+}
+
+.nc-divider {
+  border-top: var(--nc-line) solid var(--nc-border);
+  margin: var(--nc-pad-md) 0;
+}
+
+.nc-form {
+  display: grid;
+  gap: var(--nc-gap);
+}
+
+.nc-field {
+  display: grid;
+  gap: 6px;
+}
+
+.nc-label {
+  color: var(--nc-warn);
+}
+
+.nc-input,
+.nc-textarea,
+.nc-select {
+  width: 100%;
+  min-width: 0;
+  background: var(--nc-black);
+  color: var(--nc-panel-text);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: var(--nc-pad-sm) var(--nc-pad-md);
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.nc-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2rem;
+}
+
+.nc-textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.nc-input:focus,
+.nc-textarea:focus,
+.nc-select:focus {
+  outline: var(--nc-line) solid var(--nc-accent);
+  outline-offset: -2px;
+}
+
+.nc-button {
+  background: var(--nc-panel-bg);
+  color: var(--nc-panel-text);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: var(--nc-pad-sm) var(--nc-pad-md);
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.nc-button:hover,
+.nc-button:focus {
+  background: var(--nc-accent);
+  color: var(--nc-black);
+  outline: none;
+}
+
+.nc-button:active {
+  background: var(--nc-warn);
+  color: var(--nc-black);
+}
+
+.nc-button-primary {
+  background: var(--nc-accent);
+  color: var(--nc-black);
+}
+
+.nc-button-ghost {
+  background: transparent;
+  color: var(--nc-panel-text);
+}
+
+.nc-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nc-toggle input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--nc-black);
+  border: var(--nc-line) solid var(--nc-border);
+  margin: 0;
+}
+
+.nc-toggle input:checked {
+  background: var(--nc-accent);
+  border-color: var(--nc-black);
+}
+
+.nc-status-line {
+  background: var(--nc-panel-bg);
+  color: var(--nc-panel-text);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: 4px var(--nc-pad-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nc-gap);
+}
+
+/* Norton Commander Messaging and Prose Utilities */
+.nc-center {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nc-pad-lg);
+  box-sizing: border-box;
+}
+
+.nc-message {
+  background: var(--nc-panel-bg);
+  color: var(--nc-panel-text);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: var(--nc-pad-md);
+  display: grid;
+  gap: var(--nc-pad-sm);
+  box-sizing: border-box;
+}
+
+.nc-message--assistant {
+  background: var(--nc-panel-bg);
+  color: var(--nc-panel-text);
+}
+
+.nc-message--user {
+  background: var(--nc-accent);
+  color: var(--nc-black);
+  border-color: var(--nc-black);
+}
+
+.nc-prose {
+  line-height: 1;
+  text-transform: none;
+}
+
+.nc-prose a {
+  color: var(--nc-warn);
+  text-decoration: underline;
+}
+
+.nc-prose code {
+  background: var(--nc-black);
+  color: var(--nc-accent);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: 0 4px;
+}
+
+.nc-prose pre {
+  background: var(--nc-black);
+  color: var(--nc-panel-text);
+  border: var(--nc-line) solid var(--nc-border);
+  padding: var(--nc-pad-md);
+  overflow: auto;
+}
+
+.nc-prose pre code {
+  border: 0;
+  padding: 0;
+}
+
+.nc-prose blockquote {
+  margin: 0;
+  padding-left: var(--nc-pad-md);
+  border-left: var(--nc-line) solid var(--nc-border);
+  color: var(--nc-warn);
+}
+
+.nc-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--nc-line) solid var(--nc-border);
+}
+
+.nc-prose th,
+.nc-prose td {
+  border: var(--nc-line) solid var(--nc-border);
+  padding: 2px 6px;
+}
+
+.nc-prose hr {
+  border: 0;
+  border-top: var(--nc-line) solid var(--nc-border);
+  margin: var(--nc-pad-md) 0;
+}
+
+.nc-prose h1,
+.nc-prose h2,
+.nc-prose h3,
+.nc-prose h4 {
+  margin: 0 0 var(--nc-pad-sm) 0;
+  color: var(--nc-warn);
+}
+
+.nc-prose ul,
+.nc-prose ol {
+  margin: 0 0 var(--nc-pad-sm) 0;
+  padding-left: 20px;
+}
+
+.nc-prose li {
+  margin: 0 0 2px 0;
+}
+
+.nc-prose strong {
+  color: var(--nc-bright-white);
+}
+
+/* Norton Commander Scrollbar */
+.nc-scroll::-webkit-scrollbar,
+::-webkit-scrollbar {
+  width: 16px;
+  background: var(--nc-blue);
+}
+
+.nc-scroll::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+  background: var(--nc-blue);
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--nc-blue) 0px,
+    var(--nc-blue) 2px,
+    var(--nc-black) 2px,
+    var(--nc-black) 4px
+  );
+}
+
+.nc-scroll::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+  background: var(--nc-cyan);
+  border: 2px solid var(--nc-bright-white);
+}
+
+.nc-scroll::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nc-yellow);
+}
+
+/* CRT Scanline Effect */
+.crt-scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+/* Custom Range Input Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  height: 28px;
+  padding: 0;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: var(--nc-gray);
+  border: 1px solid var(--nc-bright-white);
+  height: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--nc-yellow);
+  border: 2px solid var(--nc-black);
+  height: 16px;
+  width: 16px;
+}
+
+input[type="range"]::-moz-range-track {
+  background: var(--nc-gray);
+  border: 1px solid var(--nc-bright-white);
+  height: 4px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: var(--nc-yellow);
+  border: 2px solid var(--nc-black);
+  height: 16px;
+  width: 16px;
+}
+
+/* No animations or transitions for retro feel */
+* {
+  transition: none !important;
+  animation-duration: 0s !important;
+}
+
+/* Remove all border-radius */
+* {
+  border-radius: 0 !important;
+}
+
+/* Welcome Screen Overrides */
+.nc-welcome-panel {
+  width: 100%;
+  max-width: 24rem;
+}
+
+.nc-welcome-center {
+  min-height: 100vh;
+  justify-content: center; /* Ensure flex centering works if direction is column/row */
+}
+
+.nc-welcome-header {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: var(--nc-pad-lg);
+}

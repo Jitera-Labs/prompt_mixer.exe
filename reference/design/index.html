@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Retro AI Prompt Mixer - NC Style</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=VT323&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "nc-blue": "#0000AA", // Norton Commander Blue
+                        "nc-cyan": "#00AAAA", // Selected / Highlights
+                        "nc-yellow": "#FFFF55", // Important Text
+                        "nc-white": "#AAAAAA", // Normal Text
+                        "nc-bright-white": "#FFFFFF", // Headers
+                        "nc-black": "#000000",
+                        "nc-gray": "#AAAAAA",
+                    },
+                    fontFamily: {
+                        display: ["'VT323'", "monospace"],
+                    },
+                    spacing: {
+                        '128': '32rem',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'VT323', monospace;
+            background-color: #000000;color: #AAAAAA;
+            overflow: hidden;
+            text-transform: uppercase;
+            font-size: 18px;
+        }.nc-panel {
+            background-color: #0000AA;
+            border: 4px double #FFFFFF;box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .nc-header {
+            background-color: #0000AA;
+            color: #FFFF55;
+            text-align: center;
+            font-weight: bold;
+            padding: 0 8px;
+            margin-top: -14px;width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }.nc-highlight {
+            background-color: #00AAAA;
+            color: #000000;
+        }.nc-scroll::-webkit-scrollbar {
+            width: 16px;
+            background: #0000AA;
+            border-left: 2px solid #FFFFFF;
+        }
+        .nc-scroll::-webkit-scrollbar-track {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><rect width="4" height="4" fill="%230000AA"/><rect x="1" y="1" width="2" height="2" fill="%2355FFFF" opacity="0.3"/></svg>');
+        }
+        .nc-scroll::-webkit-scrollbar-thumb {
+            background-color: #00AAAA;
+            border: 2px solid #FFFFFF;
+            box-shadow: inset 1px 1px 0 #FFFFFF;
+        }
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 12px;
+            background: #FFFF55;
+            border: 1px solid #000000;
+            margin-top: -6px;
+            box-shadow: 1px 1px 0 #000000;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #AAAAAA;
+            border: 1px solid #FFFFFF;
+        }
+        .crt-scanline {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+        }.layout-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 340px;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+            gap: 4px;
+            padding: 4px;
+        }
+        @media (max-width: 1024px) {
+            .layout-grid {
+                grid-template-columns: 200px 1fr 280px;
+            }
+        }@media (max-width: 768px) {
+            .layout-grid {
+                grid-template-columns: 0px 1fr 0px;
+            }
+            .sidebar-left, .sidebar-right {
+                display: none;}
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body>
+<div class="crt-scanline"></div>
+<div class="layout-grid">
+<header class="col-span-3 bg-nc-cyan text-black px-2 py-1 flex justify-between items-center border-b-2 border-black font-bold text-xl">
+<div class="flex gap-6">
+<span class="cursor-pointer"><span class="underline text-red-900">F</span>ile</span>
+<span class="cursor-pointer"><span class="underline text-red-900">E</span>dit</span>
+<span class="cursor-pointer"><span class="underline text-red-900">S</span>earch</span>
+<span class="cursor-pointer"><span class="underline text-red-900">O</span>ptions</span>
+<span class="cursor-pointer"><span class="underline text-red-900">H</span>elp</span>
+</div>
+<div>PROMPT_MIXER_PRO.EXE</div>
+<span class="material-symbols-outlined cursor-pointer">settings</span>
+</header>
+<aside class="sidebar-left nc-panel h-full overflow-hidden relative">
+<div class="nc-header">HISTORY</div>
+<div class="flex flex-col gap-2 p-2 mt-2">
+<button class="bg-nc-cyan text-black font-bold py-1 px-2 border-2 border-white shadow-[2px_2px_0_#000000] active:shadow-none active:translate-x-[1px] active:translate-y-[1px] text-left flex items-center gap-2">
+<span class="text-xl">+</span> NEW_CHAT.BAT
+            </button>
+</div>
+<div class="flex-grow nc-scroll overflow-y-auto px-1 py-2">
+<div class="group px-2 py-1 mb-1 cursor-pointer hover:bg-nc-cyan hover:text-black transition-none">
+<div class="flex justify-between text-nc-bright-white group-hover:text-black">
+<span class="truncate font-bold">"RETRO UI CONCEPTS"</span>
+</div>
+<div class="flex justify-between text-sm text-nc-white group-hover:text-black">
+<span>10:42 AM</span>
+</div>
+</div>
+<div class="px-2 py-1 mb-1 cursor-pointer bg-nc-cyan text-black">
+<div class="flex justify-between font-bold">
+<span class="truncate">"SYSTEM DIAGNOSTICS"</span>
+</div>
+<div class="flex justify-between text-sm">
+<span>YESTERDAY</span>
+</div>
+</div>
+<div class="group px-2 py-1 mb-1 cursor-pointer hover:bg-nc-cyan hover:text-black transition-none">
+<div class="flex justify-between text-nc-bright-white group-hover:text-black">
+<span class="truncate font-bold">"GAME IDEA GENERATOR"</span>
+</div>
+<div class="flex justify-between text-sm text-nc-white group-hover:text-black">
+<span>2 DAYS AGO</span>
+</div>
+</div>
+<div class="group px-2 py-1 mb-1 cursor-pointer hover:bg-nc-cyan hover:text-black transition-none">
+<div class="flex justify-between text-nc-bright-white group-hover:text-black">
+<span class="truncate font-bold">"CODE REFACTOR"</span>
+</div>
+<div class="flex justify-between text-sm text-nc-white group-hover:text-black">
+<span>LAST WEEK</span>
+</div>
+</div>
+</div>
+<div class="p-2 border-t-2 border-white text-center text-nc-yellow text-sm">
+            4 FILES FOUND
+        </div>
+</aside>
+<main class="nc-panel h-full relative col-span-1">
+<div class="nc-header">TERMINAL</div>
+<div class="flex-grow nc-scroll overflow-y-auto p-4 text-xl leading-relaxed flex flex-col gap-4">
+<div class="flex flex-col">
+<div class="text-nc-yellow font-bold mb-1">C:\SYSTEM\AI&gt;</div>
+<div class="text-nc-white pl-4">INITIALIZING NEURAL NET... OK.</div>
+<div class="text-nc-white pl-4">LOADED MODEL: GPT-4-TURBO.BIN</div>
+</div>
+<div class="flex flex-col mt-4">
+<div class="text-nc-cyan font-bold mb-1">[USER]:</div>
+<div class="bg-nc-white text-black p-2 inline-block border-r-4 border-b-4 border-black w-fit max-w-[90%]">
+                    Create a retro-style layout for a dashboard.
+                </div>
+<div class="text-xs text-nc-gray mt-1 pl-1">10:42 AM</div>
+</div>
+<div class="flex flex-col mt-2">
+<div class="text-nc-yellow font-bold mb-1">[SYSTEM]:</div>
+<div class="text-nc-bright-white pl-0 pr-4">
+                    Processing request...
+                    <br/><br/>
+                    I have generated a layout based on Norton Commander specifications. The design features a high-contrast blue background, double-line borders, and ASCII-based UI elements.
+                    <br/><br/>
+                    Would you like me to adjust the color palette or font size?
+                </div>
+<div class="text-xs text-nc-gray mt-1">10:43 AM</div>
+</div>
+<div class="flex items-center gap-2 mt-4 text-nc-yellow">
+<span>C:\&gt;</span>
+<span class="bg-nc-yellow w-3 h-5 cursor-blink"></span>
+</div>
+</div>
+<div class="p-2 border-t-2 border-white bg-nc-blue">
+<div class="flex border-2 border-nc-gray bg-black p-2 items-center">
+<span class="text-nc-yellow mr-2">INPUT&gt;</span>
+<input class="flex-grow bg-transparent border-none outline-none text-nc-bright-white font-mono text-xl placeholder-nc-gray focus:ring-0 p-0" placeholder="ENTER COMMAND..." type="text"/>
+<button class="text-nc-cyan hover:text-white px-2">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</main>
+<aside class="sidebar-right flex flex-col gap-1 h-full overflow-hidden">
+<div class="nc-panel h-1/2 relative">
+<div class="nc-header">CANVAS_MIXER</div>
+<div class="flex items-center justify-between px-2 pt-4 pb-2 border-b border-dashed border-white">
+<button class="bg-nc-cyan text-black px-3 py-0 font-bold border border-white shadow-[2px_2px_0_black]">PAUSE</button>
+<div class="text-nc-yellow text-sm">PRESETS: [DEFAULT]</div>
+</div>
+<div class="flex-grow flex items-center justify-center relative p-4">
+<div class="relative w-48 h-48 border border-dotted border-nc-gray rounded-full flex items-center justify-center">
+<div class="w-16 h-16 bg-nc-blue border-4 border-nc-cyan rounded-full flex items-center justify-center shadow-[0_0_15px_#00AAAA]">
+<div class="w-4 h-4 bg-nc-bright-white rounded-full"></div>
+</div>
+<div class="absolute -top-3 bg-nc-blue px-1 text-nc-bright-white font-bold">☺</div>
+<div class="absolute -bottom-3 bg-nc-blue px-1 text-nc-bright-white font-bold">☹</div>
+<div class="absolute -left-3 bg-nc-blue px-1 text-nc-bright-white font-bold">♥</div>
+<div class="absolute -right-3 bg-nc-blue px-1 text-nc-bright-white font-bold">?</div>
+<div class="absolute top-4 right-4 text-xs text-nc-gray">.</div>
+<div class="absolute bottom-8 left-6 text-xs text-nc-gray">+</div>
+</div>
+</div>
+</div>
+<div class="nc-panel h-1/2 relative">
+<div class="nc-header">ANCHOR_WEIGHTS</div>
+<div class="flex-grow nc-scroll overflow-y-auto p-2 text-lg">
+<div class="mb-3">
+<div class="flex justify-between mb-1">
+<span class="flex items-center gap-2"><span class="text-nc-yellow">☺</span> HAPPINESS</span>
+<span class="text-nc-cyan">0.85</span>
+</div>
+<div class="relative h-4 bg-black border border-nc-white">
+<div class="absolute top-0 left-0 h-full bg-nc-cyan" style="width: 85%"></div>
+<div class="absolute top-[-2px] h-[18px] w-3 bg-nc-yellow border border-black ml-[-6px]" style="left: 85%"></div>
+</div>
+</div>
+<div class="mb-3">
+<div class="flex justify-between mb-1">
+<span class="flex items-center gap-2"><span class="text-nc-yellow">♥</span> LOVE</span>
+<span class="text-nc-cyan">0.40</span>
+</div>
+<div class="relative h-4 bg-black border border-nc-white">
+<div class="absolute top-0 left-0 h-full bg-nc-cyan" style="width: 40%"></div>
+<div class="absolute top-[-2px] h-[18px] w-3 bg-nc-yellow border border-black ml-[-6px]" style="left: 40%"></div>
+</div>
+</div>
+<div class="mb-3">
+<div class="flex justify-between mb-1">
+<span class="flex items-center gap-2"><span class="text-nc-yellow">!</span> SURPRISE</span>
+<span class="text-nc-cyan">0.10</span>
+</div>
+<div class="relative h-4 bg-black border border-nc-white">
+<div class="absolute top-0 left-0 h-full bg-nc-cyan" style="width: 10%"></div>
+<div class="absolute top-[-2px] h-[18px] w-3 bg-nc-yellow border border-black ml-[-6px]" style="left: 10%"></div>
+</div>
+</div>
+<div class="mb-3">
+<div class="flex justify-between mb-1">
+<span class="flex items-center gap-2"><span class="text-nc-yellow">☹</span> SADNESS</span>
+<span class="text-nc-cyan">0.00</span>
+</div>
+<div class="relative h-4 bg-black border border-nc-white">
+<div class="absolute top-0 left-0 h-full bg-nc-cyan" style="width: 0%"></div>
+<div class="absolute top-[-2px] h-[18px] w-3 bg-nc-yellow border border-black ml-[-6px]" style="left: 0%"></div>
+</div>
+</div>
+<div class="mb-3">
+<div class="flex justify-between mb-1">
+<span class="flex items-center gap-2"><span class="text-nc-yellow">?</span> CONFUSION</span>
+<span class="text-nc-cyan">0.25</span>
+</div>
+<div class="relative h-4 bg-black border border-nc-white">
+<div class="absolute top-0 left-0 h-full bg-nc-cyan" style="width: 25%"></div>
+<div class="absolute top-[-2px] h-[18px] w-3 bg-nc-yellow border border-black ml-[-6px]" style="left: 25%"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<footer class="col-span-3 mt-1 grid grid-cols-5 md:grid-cols-10 gap-1 text-sm md:text-base font-bold select-none">
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">1</span>Help</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">2</span>Menu</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">3</span>View</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">4</span>Edit</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">5</span>Copy</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">6</span>RenMov</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">7</span>MkDir</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">8</span>Delete</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">9</span>PullDn</div>
+<div class="bg-nc-cyan text-black px-1 border-r-2 border-b-2 border-black active:border-0"><span class="text-white bg-black px-1 mr-1">10</span>Quit</div>
+</footer>
+</div>
+
+</body></html>
