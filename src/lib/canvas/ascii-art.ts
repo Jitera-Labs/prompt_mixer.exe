@@ -73,76 +73,74 @@ export const RETRO_ICONS: Record<string, EmotionIcon> = {
     ],
   },
 
-  // Keeping others with old names or mapping them if needed
-  // But for now, just the ones used in DEFAULT_ANCHORS are critical
-
-  Sarcasm: {
-    char: '~',
+  SmileyWink: {
+    char: ';)',
     blockPattern: [
       '┌───┐',
-      '│◔ ◔│',
-      '│ ‾ │',
+      '│◔ ─│',
+      '│ ◡ │',
       '└───┘',
     ],
   },
 
-  Anger: {
-    char: '▼',
+  Skull: {
+    char: '#',
     blockPattern: [
-      '▀▀▄▄▀▀',
-      '║● ●║',
-      '║▼▼▼║',
-      '╚═══╝',
+      '▄▄▄▄▄',
+      '█● ●█',
+      '▀▄█▄▀',
+      ' ▀ ▀ ',
     ],
   },
 
-  Disgust: {
-    char: '╳',
+  // Other common icons
+  SmileyXEyes: {
+    char: 'X(',
     blockPattern: [
       '┌───┐',
       '│× ×│',
-      '│ ╳ │',
+      '│ ∩ │',
       '└───┘',
     ],
   },
 
-  Fear: {
-    char: '░',
+  Ghost: {
+    char: 'oo',
     blockPattern: [
-      '░▒▓▒░',
-      '▒○ ○▒',
-      '▓ △ ▓',
-      '░▒▓▒░',
+      ' ▄▄▄ ',
+      '▐○ ○▌',
+      '▐   ▌',
+      '▀▀▀▀▀',
     ],
   },
 
-  Sadness: {
-    char: '▂',
+  SmileySad: {
+    char: ':(',
     blockPattern: [
       '╔═══╗',
       '║● ●║',
-      '║ ︶ ║',
+      '║ ∩ ║',
       '╚═══╝',
     ],
   },
 
-  Guilt: {
-    char: '◢',
+  EyeSlash: {
+    char: '0',
     blockPattern: [
       '┌───┐',
-      '│◔ ◔│',
-      '│  ▂│',
+      '│- -│',
+      '│ ─ │',
       '└───┘',
     ],
   },
 
-  Shame: {
-    char: '▁',
+  SmileyMeh: {
+    char: ':|',
     blockPattern: [
-      '░░░░░',
-      '│◔ ◔│',
-      '│ _ │',
-      '▁▁▁▁▁',
+      '┌───┐',
+      '│● ●│',
+      '│ ─ │',
+      '└───┘',
     ],
   },
 

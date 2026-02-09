@@ -10,16 +10,16 @@ const TEXT_ICONS: Record<string, string> = {
   Fire: RETRO_ICONS.Fire?.char || '^',
   Star: RETRO_ICONS.Star?.char || '*',
   Question: RETRO_ICONS.Question?.char || '?',
+  SmileyWink: RETRO_ICONS.SmileyWink?.char || ';)',
+  Skull: RETRO_ICONS.Skull?.char || '#',
+  SmileyXEyes: RETRO_ICONS.SmileyXEyes?.char || 'X(',
+  Ghost: RETRO_ICONS.Ghost?.char || 'oo',
+  SmileySad: RETRO_ICONS.SmileySad?.char || ':(',
+  EyeSlash: RETRO_ICONS.EyeSlash?.char || '0',
+  SmileyMeh: RETRO_ICONS.SmileyMeh?.char || ':|',
 
   // Other mappings
-  SmileyWink: ';)',
-  Skull: '#',
-  SmileyXEyes: 'X(',
-  Ghost: 'oo',
-  SmileySad: ':(',
   HandPalm: '_/',
-  EyeSlash: '0',
-  SmileyMeh: ':|',
 
   // Requested / Common
   Brain: '{}',
