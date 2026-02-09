@@ -14,13 +14,13 @@ export function MixerControls() {
     <div className="flex gap-2">
       <button
         onClick={togglePause}
-        className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-black py-0 px-1 cursor-pointer"
+        className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-[var(--nc-black)] py-0 px-1 cursor-pointer"
       >
         {isPaused ? '[PLAY]' : '[PAUSE]'}
       </button>
       <button
         onClick={toggleSpeed}
-        className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-black py-0 px-1 cursor-pointer"
+        className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-[var(--nc-black)] py-0 px-1 cursor-pointer"
       >
         {speed === 'slow' ? '[SLOW]' : '[FAST]'}
       </button>
