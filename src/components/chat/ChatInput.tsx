@@ -145,7 +145,7 @@ export function ChatInput() {
   };
 
   return (
-    <div className="flex bg-black p-4 items-center">
+    <div className="flex bg-[var(--nc-black)] p-4 items-center">
       <span className="text-[var(--nc-yellow)] mr-2 shrink-0">INPUT&gt;</span>
       <textarea
         ref={textareaRef}
@@ -160,7 +160,7 @@ export function ChatInput() {
       {isStreaming ? (
         <button
           onClick={handleStop}
-          className="bg-transparent border-none text-red-500 hover:bg-red-500 hover:text-black px-1 transition-none uppercase cursor-pointer"
+          className="bg-transparent border-none text-red-500 hover:bg-red-500 hover:text-[var(--nc-black)] px-1 transition-none uppercase cursor-pointer"
         >
           [STOP]
         </button>
@@ -168,7 +168,7 @@ export function ChatInput() {
         <button
           onClick={handleSend}
           disabled={!input.trim()}
-          className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-black px-1 disabled:opacity-30 disabled:cursor-not-allowed transition-none uppercase cursor-pointer"
+          className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-[var(--nc-black)] px-1 disabled:opacity-30 disabled:cursor-not-allowed transition-none uppercase cursor-pointer"
         >
           [SEND]
         </button>
