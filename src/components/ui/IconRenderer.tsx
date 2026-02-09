@@ -4,23 +4,23 @@ import { CSSProperties } from 'react';
 // Using CP437-like characters or Unicode equivalents where appropriate for TUI feel
 const TEXT_ICONS: Record<string, string> = {
   // Existing from icons.ts
-  Smiley: '☺',
-  Heart: '♥',
-  Fire: '🔥',
-  Star: '★',
+  Smiley: ':)',
+  Heart: '<3',
+  Fire: '^',
+  Star: '*',
   Question: '?',
   SmileyWink: ';)',
-  Skull: '☠',
+  Skull: '#',
   SmileyXEyes: 'X(',
-  Ghost: '👻',
+  Ghost: 'oo',
   SmileySad: ':(',
-  HandPalm: '✋',
-  EyeSlash: '∅',
+  HandPalm: '_/',
+  EyeSlash: '0',
   SmileyMeh: ':|',
 
   // Requested / Common
-  Brain: '🧠',
-  Robot: '🤖',
+  Brain: '{}',
+  Robot: '[]',
 
   // Common generic fallbacks
   Check: '√',
