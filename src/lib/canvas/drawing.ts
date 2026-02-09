@@ -1,7 +1,7 @@
 import type { Anchor } from '../types';
 import { CANVAS_CONSTANTS } from '../constants';
 import { quantizeToDOSPalette, DOS_PALETTE, getPalette } from './dos-palette';
-import { RETRO_EMOTION_ICONS, getEmotionIcon } from './ascii-art';
+import { getRetroIcon } from './ascii-art';
 import {
   drawDitheredBlock,
   drawASCIIPattern,
@@ -62,8 +62,8 @@ export function draw(
       );
     }
 
-    // Get ASCII art for this emotion
-    const emotionIcon = getEmotionIcon(anchor.name);
+    // Get ASCII art for this icon
+    const emotionIcon = getRetroIcon(anchor.icon);
 
     // Calculate character size based on value
     const charSize = 16 + (value * 20);

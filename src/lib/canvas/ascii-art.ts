@@ -19,11 +19,11 @@ export interface EmotionIcon {
  */
 
 /**
- * Retro ASCII art emotions
- * Each emotion has a single character and a multi-line block pattern
+ * Retro ASCII art icons
+ * Keyed by Icon Name (e.g. Smiley, Heart) matching IconRenderer and DEFAULT_ANCHORS
  */
-export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
-  Happiness: {
+export const RETRO_ICONS: Record<string, EmotionIcon> = {
+  Smiley: {
     char: '☺',
     blockPattern: [
       '╔═══╗',
@@ -33,7 +33,7 @@ export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
     ],
   },
 
-  Love: {
+  Heart: {
     char: '♥',
     blockPattern: [
       '▄▀▄▀▄',
@@ -43,8 +43,8 @@ export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
     ],
   },
 
-  Desire: {
-    char: '★',
+  Fire: {
+    char: '▲', // Updated from ★ to be more like fire/upward
     blockPattern: [
       '  ▲  ',
       ' ▲█▲ ',
@@ -53,8 +53,8 @@ export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
     ],
   },
 
-  Surprise: {
-    char: '!',
+  Star: {
+    char: '*', // Updated from ! to *
     blockPattern: [
       '╔═══╗',
       '║○ ○║',
@@ -63,7 +63,7 @@ export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
     ],
   },
 
-  Confusion: {
+  Question: {
     char: '?',
     blockPattern: [
       '╔═══╗',
@@ -72,6 +72,9 @@ export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
       '╚═══╝',
     ],
   },
+
+  // Keeping others with old names or mapping them if needed
+  // But for now, just the ones used in DEFAULT_ANCHORS are critical
 
   Sarcasm: {
     char: '~',
@@ -155,24 +158,25 @@ export const RETRO_EMOTION_ICONS: Record<string, EmotionIcon> = {
 };
 
 /**
- * Get emotion icon for a given emotion name
- * @param emotion - Emotion name (case-insensitive)
+ * Get retro icon by name
+ * @param iconName - Icon name (e.g. Smiley, Heart)
  * @returns EmotionIcon or default neutral icon
  */
-export function getEmotionIcon(emotion: string): EmotionIcon {
+export function getRetroIcon(iconName: string): EmotionIcon {
   // Try exact match first
-  if (RETRO_EMOTION_ICONS[emotion]) {
-    return RETRO_EMOTION_ICONS[emotion];
+  if (RETRO_ICONS[iconName]) {
+    return RETRO_ICONS[iconName];
   }
 
-  // Try case-insensitive match
-  const normalized = emotion.charAt(0).toUpperCase() + emotion.slice(1).toLowerCase();
-  if (RETRO_EMOTION_ICONS[normalized]) {
-    return RETRO_EMOTION_ICONS[normalized];
+  // Try case-insensitive matching
+  const keys = Object.keys(RETRO_ICONS);
+  const match = keys.find(k => k.toLowerCase() === iconName.toLowerCase());
+  if (match) {
+    return RETRO_ICONS[match];
   }
 
   // Default to neutral
-  return RETRO_EMOTION_ICONS.Neutral;
+  return RETRO_ICONS.Neutral;
 }
 
 /**
@@ -260,6 +264,6 @@ export function createBorderedBox(content: string[], useDouble = false): string[
 }
 
 /**
- * Available emotion names
+ * Available icon names
  */
-export const EMOTION_NAMES = Object.keys(RETRO_EMOTION_ICONS);
+export const ICON_NAMES = Object.keys(RETRO_ICONS);
