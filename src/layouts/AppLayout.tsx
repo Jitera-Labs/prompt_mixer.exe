@@ -43,7 +43,7 @@ export function AppLayout() {
       <CRTEffect />
 
       <div
-        className="flex-grow grid gap-1 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-8 bg-[var(--nc-black)] min-h-0"
+        className="flex-grow grid gap-1 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-2 bg-[var(--nc-black)] min-h-0"
         style={{
           gridTemplateColumns: isSidebarOpen ? '260px 400px 1fr' : '50px 400px 1fr',
           gridTemplateRows: '1fr',
@@ -81,11 +81,21 @@ export function AppLayout() {
 
         @media (max-width: 768px) {
           .nc-screen > div.grid {
-            grid-template-columns: 0px 1fr 0px !important;
+            grid-template-columns: 1fr !important;
+            grid-template-rows: 1fr 1fr !important;
           }
-          /* Hide elements when width is 0 */
-          .sidebar-left, .mixer-right {
-            display: none;
+          /* Hide left sidebar */
+          .sidebar-left {
+            display: none !important;
+          }
+          /* Show mixer and place on top */
+          .mixer-right {
+            display: block !important;
+            grid-row: 1;
+          }
+          /* Place chat on bottom */
+          main {
+            grid-row: 2;
           }
         }
       `}</style>
