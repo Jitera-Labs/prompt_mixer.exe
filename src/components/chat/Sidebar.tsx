@@ -53,8 +53,8 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   }
 
   return (
-    <div className="nc-panel h-full flex flex-col overflow-visible relative">
-      <div className="nc-header">HISTORY</div>
+    <div className="nc-panel h-full flex flex-col overflow-visible relative" style={{ padding: 0 }}>
+      <div className="nc-header" style={{ marginTop: '-14px' }}>HISTORY</div>
       {onToggle && (
         <button
           onClick={onToggle}
@@ -64,7 +64,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
           [◄]
         </button>
       )}
-      <div className="flex flex-col gap-2 p-2 mt-2">
+      <div className="flex flex-col gap-2 mt-4 px-2">
         <button
           onClick={handleNewChat}
           className="nc-button w-full text-left flex items-center gap-2"
@@ -73,7 +73,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
           NEW_CHAT.BAT
         </button>
       </div>
-      <div className="flex-grow nc-scroll overflow-y-auto px-1 py-2">
+      <div className="flex-grow nc-scroll overflow-y-auto px-1">
         {chats.length === 0 ? (
           <div className="p-4 text-center text-[var(--nc-gray)] text-sm">NO CHATS YET</div>
         ) : (
@@ -88,7 +88,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
           ))
         )}
       </div>
-      <div className="p-2 border-t-2 border-white text-center text-[var(--nc-yellow)] text-sm">
+      <div className="px-2 py-1 border-t-2 border-white text-center text-[var(--nc-yellow)] text-sm">
         {chats.length} FILES FOUND
       </div>
     </div>
