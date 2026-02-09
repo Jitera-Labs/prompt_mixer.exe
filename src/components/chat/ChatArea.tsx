@@ -95,7 +95,7 @@ export function ChatArea() {
   }, [messages, streamingContent, error]);
 
   return (
-    <div className="nc-panel h-full relative flex flex-col overflow-visible p-0">
+    <div className="nc-panel h-full relative flex flex-col overflow-visible pt-4 px-0 pb-0">
       <div className="nc-header">TERMINAL</div>
 
       <div className="flex-grow flex flex-col overflow-hidden relative" style={{ padding: '16px', paddingBottom: '0', paddingTop: '12px' }}>
