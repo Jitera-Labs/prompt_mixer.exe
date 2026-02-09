@@ -53,19 +53,17 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   }
 
   return (
-    <div className="nc-panel h-full flex flex-col overflow-hidden relative">
-      <div className="nc-header flex items-center gap-2">
-        HISTORY
-        {onToggle && (
-          <button
-            onClick={onToggle}
-            className="text-[var(--nc-yellow)] hover:text-[var(--nc-bright-white)] text-xs"
-            title="Collapse History"
-          >
-            [◄]
-          </button>
-        )}
-      </div>
+    <div className="nc-panel h-full flex flex-col overflow-visible relative">
+      <div className="nc-header">HISTORY</div>
+      {onToggle && (
+        <button
+          onClick={onToggle}
+          className="absolute top-1 right-2 text-[var(--nc-yellow)] hover:text-[var(--nc-bright-white)] text-xs z-10 bg-[var(--nc-panel-bg)] px-1"
+          title="Collapse History"
+        >
+          [◄]
+        </button>
+      )}
       <div className="flex flex-col gap-2 p-2 mt-2">
         <button
           onClick={handleNewChat}
