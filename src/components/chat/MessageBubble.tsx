@@ -98,13 +98,15 @@ export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
               </Streamdown>
             </div>
             {!isStreaming && message.id !== -1 && (
-              <div className="nc-status-line flex justify-start items-center mt-2 pt-2 border-t border-[var(--nc-black)] border-dotted gap-4">
-                <button onClick={handleCopy} className="text-sm px-1 bg-transparent border-none text-[var(--nc-black)] hover:bg-[var(--nc-black)] hover:text-[var(--nc-accent)] transition-none cursor-pointer" title="Copy">
-                  {copied ? '[COPIED]' : '[COPY]'}
-                </button>
-                <button onClick={() => { setIsEditing(true); setEditContent(message.content); }} className="text-sm px-1 bg-transparent border-none text-[var(--nc-black)] hover:bg-[var(--nc-black)] hover:text-[var(--nc-accent)] transition-none cursor-pointer" title="Edit">
-                  [EDIT]
-                </button>
+              <div className="nc-status-line flex justify-between items-center mt-2 pt-2 border-t border-[var(--nc-black)] border-dotted">
+                <div className="flex gap-4">
+                  <button onClick={handleCopy} className="text-sm px-1 bg-transparent border-none text-[var(--nc-black)] hover:bg-[var(--nc-black)] hover:text-[var(--nc-accent)] transition-none cursor-pointer" title="Copy">
+                    {copied ? '[COPIED]' : '[COPY]'}
+                  </button>
+                  <button onClick={() => { setIsEditing(true); setEditContent(message.content); }} className="text-sm px-1 bg-transparent border-none text-[var(--nc-black)] hover:bg-[var(--nc-black)] hover:text-[var(--nc-accent)] transition-none cursor-pointer" title="Edit">
+                    [EDIT]
+                  </button>
+                </div>
                 <span className="text-sm text-[var(--nc-black)] opacity-60">{formatRelativeTime(message.created_at)}</span>
               </div>
             )}
@@ -122,12 +124,14 @@ export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
             </div>
             {!isStreaming && message.id !== -1 && (
               <div className="nc-status-line flex justify-between items-center mt-2 pt-2 border-t border-[var(--nc-white)] border-dotted">
-                <button onClick={handleCopy} className="text-sm px-1 bg-transparent border-none text-[var(--nc-white)] hover:bg-[var(--nc-white)] hover:text-black transition-none cursor-pointer" title="Copy">
-                  {copied ? '[COPIED]' : '[COPY]'}
-                </button>
-                <button onClick={handleRegenerate} className="text-sm px-1 bg-transparent border-none text-[var(--nc-white)] hover:bg-[var(--nc-white)] hover:text-black transition-none cursor-pointer" title="Regenerate">
-                  [REGEN]
-                </button>
+                <div className="flex gap-4">
+                  <button onClick={handleCopy} className="text-sm px-1 bg-transparent border-none text-[var(--nc-white)] hover:bg-[var(--nc-white)] hover:text-black transition-none cursor-pointer" title="Copy">
+                    {copied ? '[COPIED]' : '[COPY]'}
+                  </button>
+                  <button onClick={handleRegenerate} className="text-sm px-1 bg-transparent border-none text-[var(--nc-white)] hover:bg-[var(--nc-white)] hover:text-black transition-none cursor-pointer" title="Regenerate">
+                    [REGEN]
+                  </button>
+                </div>
                 <span className="text-sm text-[var(--nc-gray)]">{formatRelativeTime(message.created_at)}</span>
               </div>
             )}
