@@ -37,6 +37,13 @@ interface MixerState {
   loadPresetAnchors: (presetId: number) => Promise<void>;
   savePreset: (name: string) => Promise<void>;
   deletePreset: (presetId: number) => Promise<void>;
+  renamePreset: (presetId: number, name: string) => Promise<void>;
+  duplicatePreset: (presetId: number, newName: string) => Promise<void>;
+  saveCurrentToPreset: () => Promise<void>;
+
+  // Session actions
+  loadSession: () => Promise<void>;
+  saveSession: () => Promise<void>;
 
   // Anchor management actions
   addAnchor: (anchor: { label: string; prompt: string; iconSmall: string; iconLarge: string; color: string }) => void;
@@ -105,6 +112,7 @@ export const useMixerStore = create<MixerState>((set, get) => ({
       handlePos: { x, y },
       targetHandlePos: { x, y }
     });
+    get().saveSession().catch(console.error);
   },
 
   updateEmotionValues: (values: EmotionValues) => {
@@ -126,7 +134,50 @@ export const useMixerStore = create<MixerState>((set, get) => ({
 
   setConnectionStatus: (status) => set({ connectionStatus: status }),
   setView: (view) => set({ view }),
-  setAnchors: (anchors) => set({ anchors }),
+  setAnchors: (anchors) => {
+    set({ anchors });
+    get().saveSession().catch(console.error);
+  },
+
+  loadSession: async () => {
+    try {
+      const savedState = await api.getSetting('last_session_state');
+      if (savedState) {
+        const parsed = JSON.parse(savedState);
+        set({
+          anchors: parsed.anchors || [],
+          handlePos: parsed.handlePos || { x: 0, y: 0 },
+          targetHandlePos: parsed.handlePos || { x: 0, y: 0 },
+          activePresetId: parsed.activePresetId ?? null,
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to load session:', e);
+    }
+  },
+
+  saveSession: async () => {
+    const { anchors, handlePos, activePresetId } = get();
+    // Only save if we have valid data
+    if (anchors.length === 0) return;
+
+    const stateToSave = {
+      anchors: anchors.map(a => ({
+        ...a,
+        // Ensure we save current positions
+        x: a.x,
+        y: a.y,
+        targetX: a.targetX,
+        targetY: a.targetY,
+        displayX: a.displayX,
+        displayY: a.displayY
+      })),
+      handlePos,
+      activePresetId
+    };
+
+    await api.setSetting('last_session_state', JSON.stringify(stateToSave));
+  },
 
   loadPresets: async () => {
     const presets = await api.listPresets();
@@ -138,8 +189,8 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     // Convert PresetAnchor[] to Anchor[] — positions will be recalculated by canvas
     const anchors: Anchor[] = presetAnchors.map(pa => ({
       name: pa.label,
-      iconSmall: pa.iconSmall,
-      iconLarge: pa.iconLarge,
+      iconSmall: pa.icon_small,
+      iconLarge: pa.icon_large,
       color: pa.color,
       isNeutral: pa.label === 'Neutral',
       prompt: pa.prompt,
@@ -152,6 +203,7 @@ export const useMixerStore = create<MixerState>((set, get) => ({
       D_influence: pa.influence_radius,
     }));
     set({ anchors, activePresetId: presetId });
+    get().saveSession().catch(console.error);
   },
 
   savePreset: async (name: string) => {
@@ -159,8 +211,8 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     const newAnchors: NewPresetAnchor[] = anchors.map((a, i) => ({
       label: a.name,
       prompt: a.prompt,
-      iconSmall: a.iconSmall,
-      iconLarge: a.iconLarge,
+      icon_small: a.iconSmall,
+      icon_large: a.iconLarge,
       color: a.color,
       position_x: a.x,
       position_y: a.y,
@@ -176,6 +228,51 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     if (get().activePresetId === presetId) {
       set({ activePresetId: null });
     }
+    await get().loadPresets();
+  },
+
+  renamePreset: async (presetId: number, name: string) => {
+    await api.renamePreset(presetId, name);
+    await get().loadPresets();
+  },
+
+  duplicatePreset: async (presetId: number, newName: string) => {
+    const presetAnchors = await api.getPresetAnchors(presetId);
+    const newAnchors: NewPresetAnchor[] = presetAnchors.map(pa => ({
+      label: pa.label,
+      prompt: pa.prompt,
+      icon_small: pa.icon_small,
+      icon_large: pa.icon_large,
+      color: pa.color,
+      position_x: pa.position_x,
+      position_y: pa.position_y,
+      influence_radius: pa.influence_radius,
+      sort_order: pa.sort_order,
+    }));
+    await api.createPreset(newName, newAnchors);
+    await get().loadPresets();
+  },
+
+  saveCurrentToPreset: async () => {
+    const { activePresetId, presets, anchors } = get();
+    if (activePresetId === null) throw new Error("No active preset");
+
+    const currentPreset = presets.find(p => p.id === activePresetId);
+    if (!currentPreset) throw new Error("Preset not found");
+
+    const newAnchors: NewPresetAnchor[] = anchors.map((a, i) => ({
+      label: a.name,
+      prompt: a.prompt,
+      icon_small: a.iconSmall,
+      icon_large: a.iconLarge,
+      color: a.color,
+      position_x: a.x,
+      position_y: a.y,
+      influence_radius: a.D_influence,
+      sort_order: i,
+    }));
+
+    await api.updatePreset(activePresetId, currentPreset.name, newAnchors);
     await get().loadPresets();
   },
 
@@ -277,6 +374,7 @@ export const useMixerStore = create<MixerState>((set, get) => ({
       handlePos: { x: canvasW / 2, y: canvasH / 2 },
       targetHandlePos: { x: canvasW / 2, y: canvasH / 2 },
     });
+    get().saveSession().catch(console.error);
   },
 
   createNewPreset: () => {
