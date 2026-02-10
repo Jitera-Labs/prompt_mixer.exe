@@ -127,7 +127,29 @@ pub fn update_preset(
 }
 
 #[tauri::command]
+pub fn rename_preset(
+    db: State<Database>,
+    preset_id: i64,
+    name: String,
+) -> Result<(), String> {
+    let conn = db.0.lock().map_err(|e| e.to_string())?;
+    let timestamp = models::now();
+
+    conn.execute(
+        "UPDATE anchor_presets SET name = ?1, updated_at = ?2 WHERE id = ?3",
+        rusqlite::params![&name, &timestamp, preset_id],
+    )
+    .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+#[tauri::command]
 pub fn delete_preset(db: State<Database>, preset_id: i64) -> Result<(), String> {
+    if preset_id == 1 {
+        return Err("Cannot delete the default preset".to_string());
+    }
+
     let conn = db.0.lock().map_err(|e| e.to_string())?;
 
     conn.execute(

@@ -27,6 +27,7 @@ pub fn run() {
             commands::presets::list_presets,
             commands::presets::create_preset,
             commands::presets::update_preset,
+            commands::presets::rename_preset,
             commands::presets::delete_preset,
             commands::presets::get_preset_anchors,
             commands::settings::get_setting,
