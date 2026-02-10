@@ -1,13 +1,13 @@
 import { useMixerStore } from '../../stores/mixerStore';
-import { DEFAULT_ANCHORS } from '../../lib/constants';
 import { IconRenderer } from '../ui/IconRenderer';
 
 export function ValueDisplay() {
   const emotionValues = useMixerStore(s => s.emotionValues);
+  const anchors = useMixerStore(s => s.anchors);
 
   return (
     <div className="flex-grow nc-scroll overflow-y-auto p-3 pt-4 text-lg grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-2">
-      {DEFAULT_ANCHORS.map(anchor => {
+      {anchors.map(anchor => {
         const value = emotionValues[anchor.name] || 0;
         const percentage = value * 100;
         return (
@@ -15,7 +15,7 @@ export function ValueDisplay() {
             <div className="flex justify-between mb-1">
               <span className="flex items-center gap-2">
                 <span className="text-[var(--nc-yellow)]">
-                  <IconRenderer icon={anchor.icon} />
+                  <IconRenderer icon={anchor.iconSmall} />
                 </span>
                 <span>{anchor.name.toUpperCase()}</span>
               </span>
