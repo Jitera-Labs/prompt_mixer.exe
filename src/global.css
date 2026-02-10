@@ -12,8 +12,8 @@
   --nc-blue: #000000;
   --nc-cyan: #00AAAA;
   --nc-yellow: #FFFF55;
-  --nc-white: #AAAAAA;
-  --nc-bright-white: #FFFFFF;
+  --nc-white: #666666;
+  --nc-bright-white: #ffffff;
   --nc-black: #000000;
   --nc-gray: #AAAAAA;
   --nc-border: var(--nc-bright-white);
@@ -76,6 +76,7 @@ body {
   background: var(--nc-panel-bg);
   border: 4px double var(--nc-border);
   padding: 16px;
+  position: relative;
 }
 
 .nc-header {
@@ -87,7 +88,6 @@ body {
   margin-right: auto;
   text-align: center;
   border: 2px solid var(--nc-border);
-  position: relative;
   width: fit-content;
   z-index: 10;
 }
@@ -205,7 +205,6 @@ body {
 .nc-button {
   background: var(--nc-panel-bg);
   color: var(--nc-panel-text);
-  border: var(--nc-line) solid var(--nc-border);
   padding: var(--nc-pad-sm) var(--nc-pad-md);
   font-family: inherit;
   font-size: inherit;
