@@ -136,8 +136,21 @@ export function MixerCanvas() {
 
         // Restore handle position from store
         const storeState = useMixerStore.getState();
-        animStateRef.current.handlePos = { ...storeState.handlePos };
-        animStateRef.current.targetHandlePos = { ...storeState.targetHandlePos };
+        const { x, y } = storeState.handlePos;
+
+        // Fix: If handle pos is invalid (-1,-1) or default (0,0), reset to center
+        // 0,0 is extremely unlikely to be a user-chosen position for the mixer handle
+        if (x < 0 || (x === 0 && y === 0)) {
+          const neutralAnchor = anchorsRef.current.find(a => a.isNeutral);
+          const center = neutralAnchor
+            ? { x: neutralAnchor.x, y: neutralAnchor.y }
+            : { x: canvas.width / 2, y: canvas.height / 2 };
+          animStateRef.current.handlePos = { ...center };
+          animStateRef.current.targetHandlePos = { ...center };
+        } else {
+          animStateRef.current.handlePos = { ...storeState.handlePos };
+          animStateRef.current.targetHandlePos = { ...storeState.targetHandlePos };
+        }
 
       } else {
         // First mount, no state: Initialize defaults
