@@ -89,6 +89,9 @@ export function MixerCanvas() {
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
 
+      // Prevent initialization or scaling if the container has no size (e.g. hidden or initializing)
+      if (newWidth === 0 || newHeight === 0) return;
+
       canvas.width = newWidth;
       canvas.height = newHeight;
 
@@ -98,7 +101,7 @@ export function MixerCanvas() {
       let currentAnchors = anchorsRef.current.length > 0 ? anchorsRef.current : useMixerStore.getState().anchors;
 
       // Check if we are resizing (valid prev size) or mounting (first load or tab switch)
-      if (prevSizeRef.current && currentAnchors.length > 0) {
+      if (prevSizeRef.current && prevSizeRef.current.w > 0 && prevSizeRef.current.h > 0 && newWidth > 0 && newHeight > 0 && currentAnchors.length > 0) {
         // Resizing: Scale existing anchors and handle
         const scaleX = newWidth / prevSizeRef.current.w;
         const scaleY = newHeight / prevSizeRef.current.h;
@@ -144,6 +147,7 @@ export function MixerCanvas() {
 
       updateEmotionValues(valuesRef.current);
       useMixerStore.getState().setAnchors(anchorsRef.current);
+      useMixerStore.getState().setHandlePos(animStateRef.current.handlePos.x, animStateRef.current.handlePos.y);
 
       prevSizeRef.current = { w: newWidth, h: newHeight };
     };
@@ -187,6 +191,10 @@ export function MixerCanvas() {
       dragStateRef.current = newState;
       animStateRef.current.isDraggingHandle = false;
       animStateRef.current.draggedAnchor = null;
+
+      // Persist handle position to store
+      const { x, y } = animStateRef.current.handlePos;
+      useMixerStore.getState().setHandlePos(x, y);
     };
 
     canvas.addEventListener('mousedown', onMouseDown);
