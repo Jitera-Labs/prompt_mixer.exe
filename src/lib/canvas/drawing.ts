@@ -63,7 +63,10 @@ export function draw(
     }
 
     // Get ASCII art for this icon
-    const emotionIcon = getRetroIcon(anchor.icon);
+    const emotionIcon = {
+       char: anchor.iconSmall || '?',
+       blockPattern: (anchor.iconLarge || '').split('\n'),
+    };
 
     // Calculate character size based on value
     const charSize = 16 + (value * 20);

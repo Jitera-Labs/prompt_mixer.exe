@@ -34,7 +34,8 @@ export interface PresetAnchor {
   preset_id: number;
   label: string;
   prompt: string;
-  icon: string;
+  iconSmall: string;
+  iconLarge: string;
   color: string;
   position_x: number;
   position_y: number;
@@ -45,7 +46,8 @@ export interface PresetAnchor {
 export interface NewPresetAnchor {
   label: string;
   prompt: string;
-  icon: string;
+  iconSmall: string;
+  iconLarge: string;
   color: string;
   position_x: number;
   position_y: number;
@@ -55,7 +57,8 @@ export interface NewPresetAnchor {
 
 export interface Anchor {
   name: string;
-  icon: string;
+  iconSmall: string;
+  iconLarge: string;
   color: string;
   isNeutral: boolean;
   prompt: string;

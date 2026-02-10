@@ -39,10 +39,11 @@ interface MixerState {
   deletePreset: (presetId: number) => Promise<void>;
 
   // Anchor management actions
-  addAnchor: (anchor: { label: string; prompt: string; icon: string; color: string }) => void;
+  addAnchor: (anchor: { label: string; prompt: string; iconSmall: string; iconLarge: string; color: string }) => void;
   updateAnchor: (index: number, updates: Partial<Anchor>) => void;
   removeAnchor: (index: number) => boolean;
   resetPositions: () => void;
+  createNewPreset: () => void;
 
   // Get current weighted anchors for LLM
   getWeightedAnchors: () => WeightedAnchorInput[];
@@ -100,7 +101,10 @@ export const useMixerStore = create<MixerState>((set, get) => ({
   },
 
   setHandlePos: (x: number, y: number) => {
-    set({ targetHandlePos: { x, y } });
+    set({
+      handlePos: { x, y },
+      targetHandlePos: { x, y }
+    });
   },
 
   updateEmotionValues: (values: EmotionValues) => {
@@ -134,7 +138,8 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     // Convert PresetAnchor[] to Anchor[] — positions will be recalculated by canvas
     const anchors: Anchor[] = presetAnchors.map(pa => ({
       name: pa.label,
-      icon: pa.icon,
+      iconSmall: pa.iconSmall,
+      iconLarge: pa.iconLarge,
       color: pa.color,
       isNeutral: pa.label === 'Neutral',
       prompt: pa.prompt,
@@ -154,7 +159,8 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     const newAnchors: NewPresetAnchor[] = anchors.map((a, i) => ({
       label: a.name,
       prompt: a.prompt,
-      icon: a.icon,
+      iconSmall: a.iconSmall,
+      iconLarge: a.iconLarge,
       color: a.color,
       position_x: a.x,
       position_y: a.y,
@@ -173,7 +179,7 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     await get().loadPresets();
   },
 
-  addAnchor: (anchor) => {
+  addAnchor: (anchor: { label: string; prompt: string; iconSmall: string; iconLarge: string; color: string }) => {
     const { anchors } = get();
     // Calculate position: place at a reasonable spot on the circle
     // Estimate canvas size from existing anchors
@@ -191,7 +197,8 @@ export const useMixerStore = create<MixerState>((set, get) => ({
 
     const newAnchor: Anchor = {
       name: anchor.label,
-      icon: anchor.icon,
+      iconSmall: anchor.iconSmall,
+      iconLarge: anchor.iconLarge,
       color: anchor.color,
       isNeutral: false,
       prompt: anchor.prompt,
@@ -269,6 +276,14 @@ export const useMixerStore = create<MixerState>((set, get) => ({
       anchors: reset,
       handlePos: { x: canvasW / 2, y: canvasH / 2 },
       targetHandlePos: { x: canvasW / 2, y: canvasH / 2 },
+    });
+  },
+
+  createNewPreset: () => {
+    set({
+      anchors: [],
+      activePresetId: null,
+      emotionValues: {},
     });
   },
 

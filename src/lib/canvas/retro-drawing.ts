@@ -3,7 +3,7 @@
  * All rendering functions disable anti-aliasing for authentic retro look
  */
 
-import { DOS_PALETTE, quantizeToDOSPalette, hexToRgb, createDitherPattern } from './dos-palette';
+import { DOS_PALETTE, LIGHT_THEME_PALETTE, quantizeToDOSPalette, hexToRgb, createDitherPattern } from './dos-palette';
 import { getShadeCharacter, ASCII_DECORATIONS } from './ascii-art';
 
 export interface RetroTextOptions {
@@ -222,7 +222,7 @@ export function drawRetroHandle(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
-  palette = DOS_PALETTE
+  palette: typeof DOS_PALETTE | typeof LIGHT_THEME_PALETTE = DOS_PALETTE
 ): void {
   ctx.save();
 
@@ -282,7 +282,7 @@ export function drawBackgroundGrid(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  palette = DOS_PALETTE
+  palette: typeof DOS_PALETTE | typeof LIGHT_THEME_PALETTE = DOS_PALETTE
 ): void {
   ctx.save();
 

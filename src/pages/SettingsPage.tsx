@@ -12,8 +12,6 @@ export function SettingsPage() {
     saveConfig,
     setTheme,
     enableCRTEffect,
-    enableSmoothAnimations,
-    enableVisualEffects,
     setPerformanceSetting
   } = useSettingsStore();
 
@@ -187,30 +185,10 @@ export function SettingsPage() {
             </div>
 
             <div className="nc-field" style={{ marginTop: '1rem' }}>
-              <label className="nc-label">PERFORMANCE</label>
-            </div>
-
-            <div className="nc-field">
-              <Checkbox
-                checked={enableVisualEffects}
-                onChange={(checked) => setPerformanceSetting('enableVisualEffects', checked)}
-                label="VISUAL EFFECTS"
-              />
-            </div>
-
-            <div className="nc-field">
               <Checkbox
                 checked={enableCRTEffect}
                 onChange={(checked) => setPerformanceSetting('enableCRTEffect', checked)}
                 label="CRT SCANLINE EFFECT"
-              />
-            </div>
-
-            <div className="nc-field">
-              <Checkbox
-                checked={enableSmoothAnimations}
-                onChange={(checked) => setPerformanceSetting('enableSmoothAnimations', checked)}
-                label="SMOOTH ANIMATIONS"
               />
             </div>
 

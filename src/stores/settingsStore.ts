@@ -20,14 +20,12 @@ interface SettingsState {
 
   // Performance settings (all default to false for better performance)
   enableCRTEffect: boolean;
-  enableSmoothAnimations: boolean;
-  enableVisualEffects: boolean;
 
   // Actions
   loadSettings: () => Promise<void>;
   saveConfig: (config: LLMConfig) => Promise<void>;
   setTheme: (theme: 'dark' | 'light') => Promise<void>;
-  setPerformanceSetting: (key: 'enableCRTEffect' | 'enableSmoothAnimations' | 'enableVisualEffects', value: boolean) => Promise<void>;
+  setPerformanceSetting: (key: 'enableCRTEffect', value: boolean) => Promise<void>;
   checkIsConfigured: () => boolean;
 }
 
@@ -38,8 +36,6 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
   // Performance settings - all default to false for optimal performance
   enableCRTEffect: false,
-  enableSmoothAnimations: false,
-  enableVisualEffects: false,
 
   loadSettings: async () => {
     try {
@@ -55,8 +51,6 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
       // Load performance settings
       const enableCRTEffect = await api.getSetting('enable_crt_effect');
-      const enableSmoothAnimations = await api.getSetting('enable_smooth_animations');
-      const enableVisualEffects = await api.getSetting('enable_visual_effects');
 
       const config: LLMConfig = {
         providerUrl: providerUrl || '',
@@ -74,8 +68,6 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         isConfigured,
         theme: (theme as 'dark' | 'light') || 'dark',
         enableCRTEffect: enableCRTEffect === 'true',
-        enableSmoothAnimations: enableSmoothAnimations === 'true',
-        enableVisualEffects: enableVisualEffects === 'true',
       });
     } catch (e) {
       console.error('Failed to load settings:', e);
@@ -102,12 +94,10 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     document.documentElement.classList.toggle('light', theme === 'light');
   },
 
-  setPerformanceSetting: async (key: 'enableCRTEffect' | 'enableSmoothAnimations' | 'enableVisualEffects', value: boolean) => {
+  setPerformanceSetting: async (key: 'enableCRTEffect', value: boolean) => {
     // Map the setting key to the storage key
     const storageKeyMap = {
       enableCRTEffect: 'enable_crt_effect',
-      enableSmoothAnimations: 'enable_smooth_animations',
-      enableVisualEffects: 'enable_visual_effects',
     };
 
     await api.setSetting(storageKeyMap[key], value.toString());

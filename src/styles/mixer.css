@@ -36,21 +36,9 @@
   background-color: var(--nc-cyan);
 }
 
+
 .connection-indicator.error {
   background-color: var(--nc-yellow);
-}
-
-/* Glow effects only when visual effects enabled */
-[data-visual-effects="true"] .connection-indicator {
-  box-shadow: 0 0 5px var(--nc-gray);
-}
-
-[data-visual-effects="true"] .connection-indicator.connected {
-  box-shadow: 0 0 12px var(--nc-cyan);
-}
-
-[data-visual-effects="true"] .connection-indicator.error {
-  box-shadow: 0 0 12px var(--nc-yellow);
 }
 
 /* Presets View - NC Style */
@@ -89,9 +77,9 @@
 /* Anchor List - NC Style */
 .anchor-list {
   padding: 12px;
-  overflow-y: auto;
-  max-height: 320px;
-  border-bottom: 2px solid var(--nc-bright-white);
+  /* overflow-y: auto; removed to allow flex container control */
+  /* max-height: 320px; removed to allow full height */
+  border-bottom: 0px solid var(--nc-bright-white);
 }
 
 .anchor-list-item {

@@ -2,7 +2,14 @@ import type { Anchor } from '../types';
 import { CANVAS_CONSTANTS } from '../constants';
 
 export function setupAnchors(
-  anchors: Array<{ name: string; icon: string; color: string; isNeutral: boolean; prompt: string }>,
+  anchors: Array<{
+    name: string;
+    iconSmall: string;
+    iconLarge: string;
+    color: string;
+    isNeutral: boolean;
+    prompt: string
+  }>,
   canvasWidth: number,
   canvasHeight: number
 ): Anchor[] {
