@@ -10,6 +10,7 @@ interface FunctionKey {
 }
 
 const FUNCTION_KEYS: FunctionKey[] = [
+  { key: 8, label: 'Presets' },
   { key: 9, label: 'Settings' },
 ];
 
