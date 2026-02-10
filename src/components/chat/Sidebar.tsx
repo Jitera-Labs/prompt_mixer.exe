@@ -18,7 +18,6 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   const { chats, activeChatId, loadChats, createChat, selectChat, deleteChat } = useChatStore();
-  const enableVisualEffects = useSettingsStore(s => s.enableVisualEffects);
 
   useEffect(() => { loadChats(); }, []);
 
