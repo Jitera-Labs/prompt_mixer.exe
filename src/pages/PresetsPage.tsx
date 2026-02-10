@@ -124,7 +124,7 @@ export function PresetsPage() {
               onClick={() => navigate('/app')}
               className="nc-button self-start mb-4"
             >
-              &lt; BACK TO MIXER
+              &lt; [BACK TO MIXER]
             </button>
 
             <div className="flex flex-col md:flex-row flex-grow overflow-hidden gap-4">
@@ -140,7 +140,7 @@ export function PresetsPage() {
                    }}
                    className="nc-button w-full mb-2 shrink-0"
                  >
-                   NEW PRESET
+                   [NEW PRESET]
                  </button>
 
                  {!showSaveInput ? (
@@ -151,14 +151,14 @@ export function PresetsPage() {
                                 className="nc-button flex-1"
                                 title="Save changes to current preset"
                             >
-                                SAVE CHANGES
+                                [SAVE CHANGES]
                             </button>
                             <button
                                  onClick={() => setShowSaveInput(true)}
                                  className="nc-button flex-1 text-center"
                                  title="Save as new preset"
                             >
-                                SAVE AS NEW
+                                [SAVE AS NEW]
                             </button>
                         </div>
                     ) : (
@@ -296,23 +296,6 @@ export function PresetsPage() {
                 ) : (
                   // LIST MODE
                   <div className="flex flex-col h-full overflow-hidden">
-                    <div className="nc-section-title border-b border-[var(--nc-white)] pb-2 mb-2 flex justify-between items-center shrink-0">
-                      <span>CURRENT CONFIGURATION</span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => resetPositions()}
-                          className="bg-transparent border-0 px-1 text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-black"
-                          title="Reset anchor positions"
-                        >
-                          [RESET POSITIONS]
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="text-[var(--nc-gray)] mb-2 shrink-0">
-                      These are the anchors in your current prompt mixer session. Loading a preset from the left will replace these.
-                    </div>
-
                     <div className="anchor-list space-y-2 overflow-y-auto flex-grow custom-scrollbar min-h-0">
                       {anchors.map((anchor, i) => (
                         <div key={`${anchor.name}-${i}`} className="anchor-list-item nc-field flex flex-col p-2 border border-transparent hover:border-[var(--nc-cyan)] group gap-2">
