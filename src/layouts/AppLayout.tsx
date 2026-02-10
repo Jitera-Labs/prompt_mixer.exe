@@ -46,7 +46,7 @@ export function AppLayout() {
       <div
         className="flex-grow grid gap-1 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-2 bg-[var(--nc-black)] min-h-0"
         style={{
-          gridTemplateColumns: isSidebarOpen ? '260px 400px 1fr' : '50px 400px 1fr',
+          gridTemplateColumns: isSidebarOpen ? '260px 450px 1fr' : '50px 450px 1fr',
           gridTemplateRows: '1fr',
           transition: 'all 0.3s ease',
         }}
@@ -56,7 +56,7 @@ export function AppLayout() {
           <Sidebar collapsed={!isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
         </aside>
 
-        {/* Main Content Area - Chat Thread */}
+        {/* Main Content Area - Chat Area */}
         <main className="relative overflow-visible h-full min-h-0">
           <ChatArea />
         </main>
@@ -76,7 +76,7 @@ export function AppLayout() {
       <style>{`
         @media (max-width: 1024px) {
           .nc-screen > div.grid {
-            grid-template-columns: ${isSidebarOpen ? '200px' : '50px'} 300px 1fr !important;
+            grid-template-columns: ${isSidebarOpen ? '200px' : '50px'} 350px 1fr !important;
           }
         }
 
@@ -89,13 +89,13 @@ export function AppLayout() {
           .sidebar-left {
             display: none !important;
           }
-          /* Show mixer and place on top */
-          .mixer-right {
-            display: block !important;
+          /* Show Chat (main) and place on top */
+          main {
             grid-row: 1;
           }
-          /* Place chat on bottom */
-          main {
+          /* Place Mixer on bottom and show it */
+          .mixer-right {
+            display: block !important;
             grid-row: 2;
           }
         }
