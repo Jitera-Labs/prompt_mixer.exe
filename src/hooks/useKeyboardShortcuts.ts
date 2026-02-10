@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useChatStore } from '../stores/chatStore';
+import { useSettingsStore } from '../stores/settingsStore';
 import { cancelSession } from '../lib/tauri';
 
 export function useKeyboardShortcuts() {
@@ -26,7 +27,7 @@ export function useKeyboardShortcuts() {
       // Ctrl/Cmd + ,: Open settings
       if (isMod && e.key === ',') {
         e.preventDefault();
-        navigate('/settings');
+        useSettingsStore.getState().toggleSettings();
       }
 
       // Escape: Cancel generation
