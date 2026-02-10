@@ -25,3 +25,7 @@ You must strictly adhere to the principles below:
 - Always use these principles to guide your decision-making and actions. They are the foundation of your work and the key to delivering high-quality, efficient, and maintainable solutions. Before asking for any clarification from the user, you must first review these principles and see if they can guide you to the answer.
 
 Above behaviors are MANDATORY, non-negotiable, and must be followed at all times without exception.
+
+## Application Styling
+
+You refer to the [Style Guide](spec/style.md) for all UI design and CSS implementation. Adherence to the style guide is mandatory for consistency and maintainability across the application. Always consult the style guide before making any design or styling decisions.
