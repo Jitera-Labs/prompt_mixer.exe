@@ -43,7 +43,8 @@ export function IconRenderer({ icon, className, fallback = '?' }: IconRendererPr
   // Check if we have a mapping
   const text = TEXT_ICONS[icon];
 
-  const display = text || (icon.length <= 2 ? icon : fallback);
+  // If map has it, use it. Otherwise assume the icon string IS the icon (e.g. "☺", "A")
+  const display = text || icon;
 
   return (
     <span
