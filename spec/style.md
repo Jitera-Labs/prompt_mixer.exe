@@ -50,13 +50,18 @@ Inputs must be 100% width of their container and look like simple text fields.
 *   `.nc-select`: Select dropdown.
     *   **Crucial**: Must use `appearance: none`.
     *   **Indicator**: Use text characters (e.g., `v` or `▼`) to mimic TUI arrows. Avoid SVG icons.
-*   `.nc-button`: Action button. Bg `--nc-panel-bg`, Border `--nc-border`.
+*   `.nc-button`: Primary Action button (e.g., Submit, Save). Bg `--nc-panel-bg`, Border `--nc-border`.
     *   *Hover*: Bg `--nc-accent` (Cyan), Text `--nc-black`.
     *   *Active*: Bg `--nc-warn` (Yellow).
-    *   **Text Actions**: For secondary actions (Copy, Edit, etc.), use text-only buttons in brackets `[ACTION]`.
-        *   No border, transparent background.
-        *   *Hover*: Background becomes text color (e.g. White), Text becomes Black.
-        *   *Format*: `[EDIT]`, `[COPY]`, `[X]`.
+*   **Secondary / Text Actions** (CRITICAL):
+    *   **RULE**: All secondary actions in lists, tables, data grids, cards, or chat messages (e.g., Edit, Delete, Copy, Remove) **MUST** use the text-only bracket format.
+    *   **NEVER** use solid buttons for these secondary actions. Simplicity is key.
+    *   **Format**: `[ACTION]` (e.g., `[EDIT]`, `[DELETE]`, `[COPY]`, `[X]`).
+    *   **Style**:
+        *   **No border**, **No background** (transparent).
+        *   *Hover*: Text color background (White/Yellow), Black text. Inverts colors.
+        *   *Padding*: Minimal (e.g., `0 4px`).
+    *   **Adherence**: This is a strict requirement. Do not pollute the UI with heavy buttons for minor actions. Keep the TUI aesthetic clean.
 
 ### Text & Messaging
 *   `.nc-header`: Title block that overlaps the top border of a panel.
@@ -81,7 +86,7 @@ Inputs must be 100% width of their container and look like simple text fields.
 *   **DO** use strict sharp edges (`border-radius: 0 !important`).
 *   **DO** use solid colors.
 *   **DO** ensure high contrast (White/Yellow on Blue/Black).
-*   **DO** use text labels like `[ACTION]` instead of icons.
+*   **DO** use text-only `[ACTION]` buttons for all secondary interactions (Edit, Delete, Copy).
 
 ### DON'T
 *   **DON'T** use shadows (box-shadow) or glow effects (unless specifically for "CRT" overlay effects).
