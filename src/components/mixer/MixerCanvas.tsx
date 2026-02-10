@@ -38,7 +38,18 @@ export function MixerCanvas() {
 
   const updateEmotionValues = useMixerStore(s => s.updateEmotionValues);
   const activePresetId = useMixerStore(s => s.activePresetId);
+  const anchors = useMixerStore(s => s.anchors);
   const { config, theme } = useSettingsStore();
+
+  // Sync canvas state when store anchors change (e.g. reset, preset load)
+  useEffect(() => {
+    if (anchors.length > 0 && !dragStateRef.current.isDraggingHandle && !dragStateRef.current.draggedAnchor) {
+      anchorsRef.current = anchors.map(a => ({ ...a }));
+      const state = useMixerStore.getState();
+      animStateRef.current.handlePos = { ...state.handlePos };
+      animStateRef.current.targetHandlePos = { ...state.handlePos };
+    }
+  }, [anchors]);
 
   // Debounced weight update to backend
   const debouncedUpdateWeights = useMemo(
@@ -192,9 +203,10 @@ export function MixerCanvas() {
       animStateRef.current.isDraggingHandle = false;
       animStateRef.current.draggedAnchor = null;
 
-      // Persist handle position to store
+      // Persist handle position and anchors to store matching store persistence
       const { x, y } = animStateRef.current.handlePos;
       useMixerStore.getState().setHandlePos(x, y);
+      useMixerStore.getState().setAnchors(anchorsRef.current);
     };
 
     canvas.addEventListener('mousedown', onMouseDown);
