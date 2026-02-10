@@ -18,6 +18,7 @@ export const updateMessage = (messageId: number, content: string) => invoke<void
 export const listPresets = () => invoke<AnchorPreset[]>('list_presets');
 export const createPreset = (name: string, anchors: NewPresetAnchor[]) => invoke<AnchorPreset>('create_preset', { name, anchors });
 export const updatePreset = (presetId: number, name: string, anchors: NewPresetAnchor[]) => invoke<void>('update_preset', { presetId, name, anchors });
+export const renamePreset = (presetId: number, name: string) => invoke<void>('rename_preset', { presetId, name });
 export const deletePreset = (presetId: number) => invoke<void>('delete_preset', { presetId });
 export const getPresetAnchors = (presetId: number) => invoke<PresetAnchor[]>('get_preset_anchors', { presetId });
 
