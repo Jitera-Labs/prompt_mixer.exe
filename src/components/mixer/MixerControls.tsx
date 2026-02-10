@@ -6,9 +6,6 @@ export function MixerControls() {
   const speed = useMixerStore(s => s.speed);
   const togglePause = useMixerStore(s => s.togglePause);
   const toggleSpeed = useMixerStore(s => s.toggleSpeed);
-  const enableVisualEffects = useSettingsStore(s => s.enableVisualEffects);
-
-  const shadowClass = enableVisualEffects ? 'shadow-[2px_2px_0_black] active:shadow-none' : '';
 
   return (
     <div className="flex gap-2">
