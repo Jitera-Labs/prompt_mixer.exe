@@ -58,8 +58,8 @@ interface MixerState {
 
 export const useMixerStore = create<MixerState>((set, get) => ({
   anchors: [],
-  handlePos: { x: 0, y: 0 },
-  targetHandlePos: { x: 0, y: 0 },
+  handlePos: { x: -1, y: -1 },
+  targetHandlePos: { x: -1, y: -1 },
   emotionValues: {},
   status: '',
   isPaused: false,
@@ -146,8 +146,8 @@ export const useMixerStore = create<MixerState>((set, get) => ({
         const parsed = JSON.parse(savedState);
         set({
           anchors: parsed.anchors || [],
-          handlePos: parsed.handlePos || { x: 0, y: 0 },
-          targetHandlePos: parsed.handlePos || { x: 0, y: 0 },
+          handlePos: parsed.handlePos || { x: -1, y: -1 },
+          targetHandlePos: parsed.handlePos || { x: -1, y: -1 },
           activePresetId: parsed.activePresetId ?? null,
         });
       }
