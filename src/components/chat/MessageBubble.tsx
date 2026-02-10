@@ -24,15 +24,15 @@ const markdownComponents: StreamdownProps['components'] = {
     }
     return <code>{children}</code>;
   },
-  pre: ({ children }) => <pre>{children}</pre>,
+  pre: ({ children }) => <pre className="max-w-full overflow-x-auto">{children}</pre>,
   table: ({ children }) => (
-    <div>
-      <table>{children}</table>
+    <div className="w-full overflow-x-auto block my-2">
+      <table className="w-full text-left border-collapse table-auto">{children}</table>
     </div>
   ),
   thead: ({ children }) => <thead>{children}</thead>,
-  th: ({ children }) => <th>{children}</th>,
-  td: ({ children }) => <td>{children}</td>,
+  th: ({ children }) => <th className="border border-[currentColor] px-4 py-2 bg-black/10">{children}</th>,
+  td: ({ children }) => <td className="border border-[currentColor] px-4 py-2">{children}</td>,
   hr: () => <hr />,
   strong: ({ children }) => <strong>{children}</strong>,
   em: ({ children }) => <em>{children}</em>,
@@ -74,7 +74,7 @@ export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
       <div className="nc-label bg-[var(--nc-bg)] inline-block px-1 -mt-3 ml-2 border border-[var(--nc-white)]">
         {isUser ? '[USER]' : '[SYSTEM]'}
       </div>
-      <div className="p-2">
+      <div className="p-2 min-w-0">
       {isUser ? (
         isEditing ? (
           <div className="nc-form">
@@ -92,7 +92,7 @@ export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
           </div>
         ) : (
           <>
-            <div className="nc-prose">
+            <div className="nc-prose break-words max-w-full">
               <Streamdown isAnimating={isStreaming} caret="block" components={markdownComponents}>
                 {message.content}
               </Streamdown>
@@ -117,7 +117,7 @@ export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
           <div className="nc-prose">SYSTEM MESSAGES CANNOT BE EDITED</div>
         ) : (
           <>
-            <div className="nc-prose">
+            <div className="nc-prose break-words max-w-full">
               <Streamdown isAnimating={isStreaming} caret="block" components={markdownComponents}>
                 {message.content}
               </Streamdown>
