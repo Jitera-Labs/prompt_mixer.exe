@@ -6,9 +6,17 @@ export function MixerControls() {
   const speed = useMixerStore(s => s.speed);
   const togglePause = useMixerStore(s => s.togglePause);
   const toggleSpeed = useMixerStore(s => s.toggleSpeed);
+  const resetPositions = useMixerStore(s => s.resetPositions);
 
   return (
     <div className="flex gap-2">
+      <button
+        onClick={resetPositions}
+        className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-[var(--nc-black)] py-0 px-1 cursor-pointer"
+        title="Reset anchor positions"
+      >
+        [RESET]
+      </button>
       <button
         onClick={togglePause}
         className="bg-transparent border-none text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-[var(--nc-black)] py-0 px-1 cursor-pointer"
