@@ -15,9 +15,9 @@ export function PromptMixer() {
     : 'DEFAULT';
 
   return (
-    <div className="flex flex-col h-full overflow-visible pb-1">
+    <div className="min-h-0 flex flex-col h-full overflow-hidden pb-1">
       {/* Main Canvas Panel - Full Height */}
-      <div className="nc-panel flex-grow relative flex flex-col overflow-visible"> {/** Changed overflow-hidden to overflow-visible and added padding-bottom 1px */}
+      <div className="nc-panel flex-grow relative flex flex-col overflow-hidden">
         <div className="nc-header">{view === 'canvas' ? 'CANVAS_MIXER' : 'ANCHORS_AND_PRESETS'}</div>
         <div className="flex items-center justify-between px-2 pt-4 pb-2 border-b border-dashed border-white">
           <MixerControls />
@@ -29,7 +29,7 @@ export function PromptMixer() {
       </div>
 
       {/* Floating Weights Panel - Bottom Strip */}
-      <div className="nc-panel h-1/2 relative flex flex-col overflow-visible mt-2">
+      <div className="nc-panel h-[30%] relative flex flex-col overflow-hidden mt-2 shrink-0">
         <div className="nc-header">ANCHOR_WEIGHTS</div>
         <ValueDisplay />
       </div>
