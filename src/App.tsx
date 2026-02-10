@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSettingsStore } from './stores/settingsStore';
+import { useMixerStore } from './stores/mixerStore';
 import { AppLayout } from './layouts/AppLayout';
 import { WelcomePage } from './pages/WelcomePage';
 import { PresetsPage } from './pages/PresetsPage';
@@ -13,7 +14,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadSettings().finally(() => setIsLoading(false));
+    Promise.all([
+      loadSettings(),
+      useMixerStore.getState().loadPresets(),
+      useMixerStore.getState().loadSession()
+    ]).finally(() => setIsLoading(false));
   }, []);
 
   // Apply theme to root element
