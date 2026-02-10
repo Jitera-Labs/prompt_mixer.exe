@@ -16,7 +16,6 @@ export function showToast(msg: Omit<ToastMessage, 'id'>) {
 
 export function ToastContainer() {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const enableVisualEffects = useSettingsStore(state => state.enableVisualEffects);
 
   const addToast = useCallback((msg: Omit<ToastMessage, 'id'>) => {
     const id = Date.now().toString();
