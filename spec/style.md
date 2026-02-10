@@ -15,7 +15,7 @@ Use these variables defined in `global.css`. Do not use hex codes directly.
 
 | Variable | Value | Usage |
 | :--- | :--- | :--- |
-| `--nc-blue` | `#0000AA` | Main background for panels, dialogs. |
+| `--nc-blue` | `#000000` | Main background for panels, dialogs. |
 | `--nc-cyan` | `#00AAAA` | Accents, selected items, highlights. |
 | `--nc-yellow` | `#FFFF55` | Warnings, headers, active states. |
 | `--nc-white` | `#AAAAAA` | Standard text. |
