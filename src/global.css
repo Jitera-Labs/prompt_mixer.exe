@@ -78,13 +78,6 @@ body {
   padding: 16px;
 }
 
-
-
-/* Box-shadow only when visual effects enabled */
-[data-visual-effects="true"] .nc-panel {
-  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
-}
-
 .nc-header {
   background: var(--nc-panel-bg);
   color: var(--nc-yellow);
@@ -412,21 +405,44 @@ body {
   background: var(--nc-yellow);
 }
 
-/* CRT Scanline Effect */
+/* CRT Scanline Effect - Hardware Accelerated */
+@keyframes crt-scan-move {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(4px);
+  }
+}
+
 .crt-scanline {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 9999;
+  overflow: hidden;
+}
+
+.crt-scanline::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 4px);
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.4) 35%,
+    rgba(0, 0, 0, 0.2) 50%,
     transparent 50%
   );
   background-size: 100% 4px;
+  animation: crt-scan-move 0.3s linear infinite !important;
+  pointer-events: none;
+  will-change: transform;
 }
 
 /* Custom Range Input Styling */

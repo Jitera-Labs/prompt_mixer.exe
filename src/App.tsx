@@ -10,18 +10,17 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import CRTEffect from './components/layout/CRTEffect';
 
 function App() {
-  const { loadSettings, isConfigured, enableVisualEffects, theme } = useSettingsStore();
+  const { loadSettings, isConfigured, theme } = useSettingsStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadSettings().finally(() => setIsLoading(false));
   }, []);
 
-  // Apply theme and visual effects to root element
+  // Apply theme to root element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.setAttribute('data-visual-effects', String(enableVisualEffects));
-  }, [theme, enableVisualEffects]);
+  }, [theme]);
 
   if (isLoading) {
     return (
