@@ -21,11 +21,16 @@ interface SettingsState {
   // Performance settings (all default to false for better performance)
   enableCRTEffect: boolean;
 
+  // UI State
+  isSettingsOpen: boolean;
+
   // Actions
   loadSettings: () => Promise<void>;
   saveConfig: (config: LLMConfig) => Promise<void>;
   setTheme: (theme: 'dark' | 'light') => Promise<void>;
   setPerformanceSetting: (key: 'enableCRTEffect', value: boolean) => Promise<void>;
+  setSettingsOpen: (open: boolean) => void;
+  toggleSettings: () => void;
   checkIsConfigured: () => boolean;
 }
 
@@ -36,6 +41,9 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
   // Performance settings - all default to false for optimal performance
   enableCRTEffect: false,
+
+  // UI State
+  isSettingsOpen: false,
 
   loadSettings: async () => {
     try {
@@ -103,6 +111,10 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     await api.setSetting(storageKeyMap[key], value.toString());
     set({ [key]: value });
   },
+
+  setSettingsOpen: (open: boolean) => set({ isSettingsOpen: open }),
+
+  toggleSettings: () => set((state) => ({ isSettingsOpen: !state.isSettingsOpen })),
 
   checkIsConfigured: () => {
     const { config } = get();
