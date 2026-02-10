@@ -4,7 +4,10 @@ import { Sidebar } from '../components/chat/Sidebar';
 import { ChatArea } from '../components/chat/ChatArea';
 import { PromptMixer } from '../components/mixer/PromptMixer';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useSettingsStore } from '../stores/settingsStore';
+import { SettingsModal } from '../components/settings/SettingsModal';
 import FunctionBar from '../components/layout/FunctionBar';
+import TopMenu from '../components/layout/TopMenu';
 
 export function AppLayout() {
   const navigate = useNavigate();
@@ -31,7 +34,7 @@ export function AppLayout() {
         navigate('/presets');
         break;
       case 9: // F9 - Settings
-        navigate('/settings');
+        useSettingsStore.getState().toggleSettings();
         break;
       default:
         console.log(`Function key F${key} pressed`);
@@ -42,9 +45,8 @@ export function AppLayout() {
 
   return (
     <div className="nc-screen h-screen w-screen overflow-hidden flex flex-col">
-
       <div
-        className="flex-grow grid gap-1 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-2 bg-[var(--nc-black)] min-h-0"
+        className="flex-grow grid gap-2 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-2 bg-[var(--nc-black)] min-h-0"
         style={{
           gridTemplateColumns: isSidebarOpen ? '260px 450px 1fr' : '50px 450px 1fr',
           gridTemplateRows: '1fr',
@@ -71,6 +73,8 @@ export function AppLayout() {
       <div className="shrink-0">
         <FunctionBar onAction={handleFunctionKey} />
       </div>
+
+      <SettingsModal />
 
       {/* Responsive styles */}
       <style>{`
