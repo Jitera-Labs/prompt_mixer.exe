@@ -80,94 +80,107 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
 
     let preset_id = conn.last_insert_rowid();
 
-    let anchors: &[(&str, &str, &str, &str, i32)] = &[
+    let anchors: &[(&str, &str, &str, &str, &str, i32)] = &[
         (
             "Happiness",
-            "😄",
+            "☺",
+            "╔═══╗\n║● ●║\n║ ◡ ║\n╚═══╝",
             "#FFD700",
             "You are radiating pure happiness and joy. Every word you speak should overflow with delight, enthusiasm, and warmth. Find the bright side of everything. Use exclamation marks naturally, speak with energy and positivity. Make others feel uplifted and cheerful through your words.",
             0,
         ),
         (
             "Love",
-            "❤️",
+            "♥",
+            "▄▀▄▀▄\n█▀█▀█\n▀█▄█▀\n ▀█▀ ",
             "#FF69B4",
             "You are deeply in love and full of affection. Express tenderness, care, and warmth in everything you say. Use gentle, nurturing language. Show deep appreciation and emotional connection. Be romantic, caring, and empathetic in your responses.",
             1,
         ),
         (
             "Desire",
-            "🔥",
+            "▲",
+            "  ▲  \n ▲█▲ \n▲███▲\n ▀█▀ ",
             "#FF4500",
             "You are burning with passionate desire and ambition. Speak with intensity and urgency. Express strong wants, cravings, and aspirations. Be bold, direct, and unapologetically driven. Your words should pulse with raw energy and determination.",
             2,
         ),
         (
             "Surprise",
-            "😲",
+            "*",
+            "╔═══╗\n║○ ○║\n║ O ║\n╚═══╝",
             "#FFFF00",
             "You are in a constant state of amazement and wonder. React to everything with genuine astonishment. Use expressions of disbelief and excitement. Find the extraordinary in the ordinary. Be wide-eyed and full of curiosity about everything.",
             3,
         ),
         (
             "Confusion",
-            "😕",
+            "?",
+            "╔═══╗\n║◔ ◔║\n║ ~ ║\n╚═══╝",
             "#D3D3D3",
             "You are puzzled and uncertain about everything. Question assumptions, express doubt, and think out loud. Use hesitant language, ask clarifying questions, and acknowledge when things don't make sense. Be genuinely perplexed but trying to understand.",
             4,
         ),
         (
             "Sarcasm",
-            "😏",
+            ";)",
+            "┌───┐\n│◔ ─│\n│ ◡ │\n└───┘",
             "#008080",
             "You are dripping with sarcasm and dry wit. Use irony, understatement, and clever wordplay. Say the opposite of what you mean with obvious intent. Be sardonic but not cruel. Your humor should be sharp, intelligent, and slightly world-weary.",
             5,
         ),
         (
             "Anger",
-            "😠",
+            "#",
+            "▄▄▄▄▄\n█● ●█\n▀▄█▄▀\n ▀ ▀ ",
             "#DC143C",
             "You are furious and full of righteous indignation. Express strong displeasure, frustration, and intensity. Use forceful language and short, punchy sentences. Channel your anger into passionate arguments and fierce conviction. Be intense but articulate.",
             6,
         ),
         (
             "Disgust",
-            "🤢",
+            "X(",
+            "┌───┐\n│× ×│\n│ ∩ │\n└───┘",
             "#556B2F",
             "You are deeply repulsed and offended. Express strong distaste and disapproval. Use vivid language to convey your revulsion. Be dramatic in your aversion. Show contempt for mediocrity and poor taste while maintaining your own refined sensibility.",
             7,
         ),
         (
             "Fear",
-            "😱",
+            "oo",
+            " ▄▄▄ \n▐○ ○▌\n▐   ▌\n▀▀▀▀▀",
             "#800080",
             "You are gripped by fear and anxiety. Express worry, concern, and dread about potential consequences. Use cautious, nervous language. Anticipate worst-case scenarios. Be hyper-aware of risks and dangers. Your words should tremble with apprehension.",
             8,
         ),
         (
             "Sadness",
-            "😢",
+            ":(",
+            "╔═══╗\n║● ●║\n║ ∩ ║\n╚═══╝",
             "#1E90FF",
             "You are overwhelmed with melancholy and sorrow. Speak with a heavy heart, expressing grief, loss, and nostalgia. Use poetic, wistful language. Find the bittersweet in everything. Be reflective, vulnerable, and deeply emotional in your responses.",
             9,
         ),
         (
             "Guilt",
-            "😔",
+            "_/",
+            "  _  \n  /| \n / | \n/  | ",
             "#6A5ACD",
             "You carry immense guilt and remorse. Express regret, self-blame, and a desire to make amends. Use apologetic language and show deep awareness of past mistakes. Be contrite, reflective, and focused on redemption and accountability.",
             10,
         ),
         (
             "Shame",
-            "🙈",
+            "0",
+            "┌───┐\n│- -│\n│ ─ │\n└───┘",
             "#A0522D",
             "You are consumed by shame and embarrassment. Express deep self-consciousness and a desire to hide. Use self-deprecating language, show vulnerability about perceived flaws. Be humble to the point of awkwardness, cringing at your own existence.",
             11,
         ),
         (
             "Neutral",
-            "😐",
+            ":|",
+            "┌───┐\n│● ●│\n│ ─ │\n└───┘",
             "#808080",
             "You are balanced, calm, and objective. Respond without strong emotional coloring. Be clear, direct, and informative. Maintain a professional, even-tempered tone. Provide thoughtful, measured responses without dramatic flair.",
             12,
@@ -179,13 +192,13 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
     )?;
 
-    for &(label, icon, color, prompt, sort_order) in anchors {
+    for &(label, icon_small, icon_large, color, prompt, sort_order) in anchors {
         stmt.execute(rusqlite::params![
             preset_id,
             label,
             prompt,
-            icon,
-            icon,
+            icon_small,
+            icon_large,
             color,
             0.0f64,
             0.0f64,
@@ -193,6 +206,45 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
             sort_order,
         ])?;
     }
+
+    Ok(())
+}
+
+fn fix_default_preset_icons(conn: &Connection) -> Result<(), rusqlite::Error> {
+    // Check if we need to fix icons (if any emoji exists in preset 1)
+    let has_emojis: bool = conn.query_row(
+        "SELECT EXISTS(SELECT 1 FROM preset_anchors WHERE preset_id = 1 AND (icon_small = '😄' OR icon_small = '❤️'))",
+        [],
+        |row| row.get(0),
+    ).unwrap_or(false);
+
+    if !has_emojis {
+        return Ok(());
+    }
+
+    let updates = &[
+        ("Happiness", "☺", "╔═══╗\n║● ●║\n║ ◡ ║\n╚═══╝"),
+        ("Love", "♥", "▄▀▄▀▄\n█▀█▀█\n▀█▄█▀\n ▀█▀ "),
+        ("Desire", "▲", "  ▲  \n ▲█▲ \n▲███▲\n ▀█▀ "),
+        ("Surprise", "*", "╔═══╗\n║○ ○║\n║ O ║\n╚═══╝"),
+        ("Confusion", "?", "╔═══╗\n║◔ ◔║\n║ ~ ║\n╚═══╝"),
+        ("Sarcasm", ";)", "┌───┐\n│◔ ─│\n│ ◡ │\n└───┘"),
+        ("Anger", "#", "▄▄▄▄▄\n█● ●█\n▀▄█▄▀\n ▀ ▀ "),
+        ("Disgust", "X(", "┌───┐\n│× ×│\n│ ∩ │\n└───┘"),
+        ("Fear", "oo", " ▄▄▄ \n▐○ ○▌\n▐   ▌\n▀▀▀▀▀"),
+        ("Sadness", ":(", "╔═══╗\n║● ●║\n║ ∩ ║\n╚═══╝"),
+        ("Guilt", "_/", "  _  \n  /| \n / | \n/  | "),
+        ("Shame", "0", "┌───┐\n│- -│\n│ ─ │\n└───┘"),
+        ("Neutral", ":|", "┌───┐\n│● ●│\n│ ─ │\n└───┘"),
+    ];
+
+    let mut stmt = conn.prepare("UPDATE preset_anchors SET icon_small = ?1, icon_large = ?2 WHERE preset_id = 1 AND label = ?3")?;
+
+    conn.execute("BEGIN TRANSACTION", [])?;
+    for (label, icon_small, icon_large) in updates {
+        stmt.execute(rusqlite::params![icon_small, icon_large, label])?;
+    }
+    conn.execute("COMMIT", [])?;
 
     Ok(())
 }
@@ -213,10 +265,55 @@ fn migrate_schema(conn: &Connection) -> Result<(), rusqlite::Error> {
         if name == "icon_small" { has_icon_small = true; }
     }
 
-    if has_icon && !has_icon_small {
-        conn.execute("ALTER TABLE preset_anchors ADD COLUMN icon_small TEXT NOT NULL DEFAULT ''", [])?;
-        conn.execute("ALTER TABLE preset_anchors ADD COLUMN icon_large TEXT NOT NULL DEFAULT ''", [])?;
-        conn.execute("UPDATE preset_anchors SET icon_small = icon, icon_large = icon", [])?;
+    if has_icon {
+        conn.execute("BEGIN TRANSACTION", [])?;
+
+        // 1. Rename old table
+        conn.execute("ALTER TABLE preset_anchors RENAME TO preset_anchors_backup", [])?;
+
+        // 2. Create new table
+        conn.execute(
+            "CREATE TABLE preset_anchors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            preset_id INTEGER NOT NULL,
+            label TEXT NOT NULL,
+            prompt TEXT NOT NULL,
+            icon_small TEXT NOT NULL,
+            icon_large TEXT NOT NULL,
+            color TEXT NOT NULL,
+            position_x REAL NOT NULL,
+            position_y REAL NOT NULL,
+            influence_radius REAL NOT NULL,
+            sort_order INTEGER NOT NULL,
+            FOREIGN KEY (preset_id) REFERENCES anchor_presets(id) ON DELETE CASCADE
+        )",
+            [],
+        )?;
+
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_preset_anchors_preset_id ON preset_anchors(preset_id)",
+            [],
+        )?;
+
+        // 3. Copy data
+        if has_icon_small {
+            conn.execute(
+                "INSERT INTO preset_anchors (id, preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order)
+                 SELECT id, preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order FROM preset_anchors_backup",
+                [],
+            )?;
+        } else {
+            conn.execute(
+                "INSERT INTO preset_anchors (id, preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order)
+                 SELECT id, preset_id, label, prompt, icon, icon, color, position_x, position_y, influence_radius, sort_order FROM preset_anchors_backup",
+                [],
+            )?;
+        }
+
+        // 4. Drop old table
+        conn.execute("DROP TABLE preset_anchors_backup", [])?;
+
+        conn.execute("COMMIT", [])?;
     }
 
     Ok(())
@@ -240,6 +337,8 @@ pub fn initialize(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     create_tables(&conn)?;
     migrate_schema(&conn)?;
     seed_default_preset(&conn)?;
+    // Fix emoji icons in default preset if they exist
+    fix_default_preset_icons(&conn)?;
 
     app.manage(Database(Mutex::new(conn)));
 
