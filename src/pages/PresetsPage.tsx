@@ -61,7 +61,7 @@ export function PresetsPage() {
   const isEditing = editingIndex !== null || addingAnchor;
 
   return (
-    <div className="nc-screen h-screen w-screen flex flex-col overflow-hidden">
+    <div className="nc-screen h-screen w-screen flex flex-col overflow-hidden p-2">
       <div className="nc-panel flex-grow flex flex-col overflow-hidden relative">
         <div className="nc-header">ANCHORS_AND_PRESETS</div>
 
@@ -197,25 +197,32 @@ export function PresetsPage() {
 
                     <div className="anchor-list space-y-2 overflow-y-auto flex-grow custom-scrollbar min-h-0">
                       {anchors.map((anchor, i) => (
-                        <div key={`${anchor.name}-${i}`} className="anchor-list-item nc-field flex items-center gap-2 p-2 border border-transparent hover:border-[var(--nc-cyan)] group">
-                              <span className="anchor-list-icon w-8 text-center flex justify-center items-center">
-                                <IconRenderer icon={anchor.iconSmall} />
-                              </span>
-                              <span className="anchor-list-swatch w-3 h-3 border border-white shrink-0" style={{ backgroundColor: anchor.color }} />
-                              <div className="flex flex-col flex-grow overflow-hidden min-w-0 px-2">
-                                  <span className="anchor-list-label truncate">{anchor.name}</span>
-                                  <span className="text-[var(--nc-gray)] truncate font-mono">{anchor.prompt}</span>
+                        <div key={`${anchor.name}-${i}`} className="anchor-list-item nc-field flex flex-col p-2 border border-transparent hover:border-[var(--nc-cyan)] group gap-2">
+                              {/* Header: Icon | Color Swatch | Label */}
+                              <div className="flex items-center gap-2 w-full">
+                                <span className="anchor-list-icon w-8 text-center flex justify-center items-center shrink-0">
+                                  <IconRenderer icon={anchor.iconSmall} />
+                                </span>
+                                <span className="anchor-list-swatch w-3 h-3 border border-white shrink-0" style={{ backgroundColor: anchor.color }} />
+                                <span className="anchor-list-label font-bold text-[var(--nc-white)]">{anchor.name}</span>
                               </div>
-                              <div className="anchor-list-actions flex gap-2 shrink-0">
+
+                              {/* Description: Prompt text */}
+                              <div className="w-full text-[var(--nc-gray)] break-words whitespace-pre-wrap">
+                                  {anchor.prompt}
+                              </div>
+
+                              {/* Buttons */}
+                              <div className="anchor-list-actions flex gap-2 w-full">
                                 <button
                                   onClick={() => { setEditingIndex(i); setAddingAnchor(false); }}
-                                  className="bg-transparent border-0 px-1 text-[var(--nc-cyan)] hover:bg-[var(--nc-cyan)] hover:text-black cursor-pointer"
+                                  className="bg-transparent border-0 px-1 text-[var(--nc-white)] hover:bg-[var(--nc-white)] hover:text-black cursor-pointer"
                                 >
                                   [EDIT]
                                 </button>
                                 <button
                                   onClick={() => handleDeleteAnchor(i)}
-                                  className="bg-transparent border-0 px-1 text-[var(--nc-yellow)] hover:bg-[var(--nc-yellow)] hover:text-black cursor-pointer"
+                                  className="bg-transparent border-0 px-1 text-[var(--nc-white)] hover:bg-[var(--nc-white)] hover:text-black cursor-pointer"
                                 >
                                   [DEL]
                                 </button>
