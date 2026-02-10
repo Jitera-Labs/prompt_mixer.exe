@@ -7,7 +7,7 @@ import { useSettingsStore } from '../../stores/settingsStore';
  * Only renders when enableCRTEffect is true in settings
  */
 const CRTEffect: React.FC = () => {
-  const { enableCRTEffect } = useSettingsStore();
+  const enableCRTEffect = useSettingsStore((state) => state.enableCRTEffect);
 
   if (!enableCRTEffect) return null;
 
