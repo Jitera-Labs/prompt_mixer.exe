@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useSettingsStore } from './stores/settingsStore';
 import { AppLayout } from './layouts/AppLayout';
 import { WelcomePage } from './pages/WelcomePage';
-import { SettingsPage } from './pages/SettingsPage';
 import { PresetsPage } from './pages/PresetsPage';
 import { ToastContainer } from './components/ui/Toast';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -38,7 +37,6 @@ function App() {
         <Routes>
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/app" element={<AppLayout />} />
-          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/presets" element={<PresetsPage />} />
           <Route path="*" element={<Navigate to={isConfigured ? "/app" : "/welcome"} replace />} />
         </Routes>
