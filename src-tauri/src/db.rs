@@ -42,7 +42,8 @@ fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             preset_id INTEGER NOT NULL,
             label TEXT NOT NULL,
             prompt TEXT NOT NULL,
-            icon TEXT NOT NULL,
+            icon_small TEXT NOT NULL,
+            icon_large TEXT NOT NULL,
             color TEXT NOT NULL,
             position_x REAL NOT NULL,
             position_y REAL NOT NULL,
@@ -174,8 +175,8 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
     ];
 
     let mut stmt = conn.prepare(
-        "INSERT INTO preset_anchors (preset_id, label, prompt, icon, color, position_x, position_y, influence_radius, sort_order)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+        "INSERT INTO preset_anchors (preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
     )?;
 
     for &(label, icon, color, prompt, sort_order) in anchors {
@@ -184,12 +185,38 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
             label,
             prompt,
             icon,
+            icon,
             color,
             0.0f64,
             0.0f64,
             0.35f64,
             sort_order,
         ])?;
+    }
+
+    Ok(())
+}
+
+fn migrate_schema(conn: &Connection) -> Result<(), rusqlite::Error> {
+    let mut stmt = conn.prepare("PRAGMA table_info(preset_anchors)")?;
+    let rows = stmt.query_map([], |row| {
+        let name: String = row.get(1)?;
+        Ok(name)
+    })?;
+
+    let mut has_icon = false;
+    let mut has_icon_small = false;
+
+    for row in rows {
+        let name = row?;
+        if name == "icon" { has_icon = true; }
+        if name == "icon_small" { has_icon_small = true; }
+    }
+
+    if has_icon && !has_icon_small {
+        conn.execute("ALTER TABLE preset_anchors ADD COLUMN icon_small TEXT NOT NULL DEFAULT ''", [])?;
+        conn.execute("ALTER TABLE preset_anchors ADD COLUMN icon_large TEXT NOT NULL DEFAULT ''", [])?;
+        conn.execute("UPDATE preset_anchors SET icon_small = icon, icon_large = icon", [])?;
     }
 
     Ok(())
@@ -211,6 +238,7 @@ pub fn initialize(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     create_tables(&conn)?;
+    migrate_schema(&conn)?;
     seed_default_preset(&conn)?;
 
     app.manage(Database(Mutex::new(conn)));

@@ -49,8 +49,8 @@ pub fn create_preset(
 
     let mut stmt = conn
         .prepare(
-            "INSERT INTO preset_anchors (preset_id, label, prompt, icon, color, position_x, position_y, influence_radius, sort_order)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+            "INSERT INTO preset_anchors (preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
         )
         .map_err(|e| e.to_string())?;
 
@@ -59,7 +59,8 @@ pub fn create_preset(
             preset_id,
             &anchor.label,
             &anchor.prompt,
-            &anchor.icon,
+            &anchor.icon_small,
+            &anchor.icon_large,
             &anchor.color,
             anchor.position_x,
             anchor.position_y,
@@ -101,8 +102,8 @@ pub fn update_preset(
 
     let mut stmt = conn
         .prepare(
-            "INSERT INTO preset_anchors (preset_id, label, prompt, icon, color, position_x, position_y, influence_radius, sort_order)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+            "INSERT INTO preset_anchors (preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
         )
         .map_err(|e| e.to_string())?;
 
@@ -111,7 +112,8 @@ pub fn update_preset(
             preset_id,
             &anchor.label,
             &anchor.prompt,
-            &anchor.icon,
+            &anchor.icon_small,
+            &anchor.icon_large,
             &anchor.color,
             anchor.position_x,
             anchor.position_y,
@@ -146,7 +148,7 @@ pub fn get_preset_anchors(
 
     let mut stmt = conn
         .prepare(
-            "SELECT id, preset_id, label, prompt, icon, color, position_x, position_y, influence_radius, sort_order
+            "SELECT id, preset_id, label, prompt, icon_small, icon_large, color, position_x, position_y, influence_radius, sort_order
              FROM preset_anchors
              WHERE preset_id = ?1
              ORDER BY sort_order ASC",
@@ -160,12 +162,13 @@ pub fn get_preset_anchors(
                 preset_id: row.get(1)?,
                 label: row.get(2)?,
                 prompt: row.get(3)?,
-                icon: row.get(4)?,
-                color: row.get(5)?,
-                position_x: row.get(6)?,
-                position_y: row.get(7)?,
-                influence_radius: row.get(8)?,
-                sort_order: row.get(9)?,
+                icon_small: row.get(4)?,
+                icon_large: row.get(5)?,
+                color: row.get(6)?,
+                position_x: row.get(7)?,
+                position_y: row.get(8)?,
+                influence_radius: row.get(9)?,
+                sort_order: row.get(10)?,
             })
         })
         .map_err(|e| e.to_string())?;
