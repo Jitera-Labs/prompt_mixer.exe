@@ -116,7 +116,6 @@ export function SettingsPage() {
                 apiKey={apiKey}
                 model={model}
                 onChange={setModel}
-                className="nc-select"
               />
             </div>
 
