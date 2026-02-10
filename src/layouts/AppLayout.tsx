@@ -5,7 +5,6 @@ import { ChatArea } from '../components/chat/ChatArea';
 import { PromptMixer } from '../components/mixer/PromptMixer';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import FunctionBar from '../components/layout/FunctionBar';
-import CRTEffect from '../components/layout/CRTEffect';
 
 export function AppLayout() {
   const navigate = useNavigate();
@@ -28,6 +27,9 @@ export function AppLayout() {
   // Function key handler
   const handleFunctionKey = (key: number) => {
     switch (key) {
+      case 8: // F8 - Presets
+        navigate('/presets');
+        break;
       case 9: // F9 - Settings
         navigate('/settings');
         break;
@@ -40,7 +42,6 @@ export function AppLayout() {
 
   return (
     <div className="nc-screen h-screen w-screen overflow-hidden flex flex-col">
-      <CRTEffect />
 
       <div
         className="flex-grow grid gap-1 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-2 bg-[var(--nc-black)] min-h-0"
