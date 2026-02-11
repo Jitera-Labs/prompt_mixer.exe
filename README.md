@@ -9,6 +9,14 @@
 
 An environment to explore mid-generation prompt steering.
 
+## [DEMO]
+
+
+
+https://github.com/user-attachments/assets/1437dcbc-2d8c-4121-9cc4-c34dc677b075
+
+
+
 ## [FEATURES]
 
 ![feature image](./assets/mixer_core.png)
