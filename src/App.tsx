@@ -11,7 +11,7 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import CRTEffect from './components/layout/CRTEffect';
 
 function App() {
-  const { loadSettings, isConfigured, theme } = useSettingsStore();
+  const { loadSettings, isConfigured, theme, enableDitherFilter } = useSettingsStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,6 +26,10 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.body.classList.toggle('dither-enabled', enableDitherFilter);
+  }, [enableDitherFilter]);
 
   if (isLoading) {
     return (
