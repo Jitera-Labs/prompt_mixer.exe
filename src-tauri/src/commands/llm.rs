@@ -283,6 +283,7 @@ pub async fn start_mixing_session(
     provider_url: String,
     api_key: String,
     model: String,
+    speed: String,
     temperature: f64,
     max_tokens: i64,
     top_p: f64,
@@ -341,7 +342,7 @@ pub async fn start_mixing_session(
             is_active: true,
             is_paused: false,
             is_mixing: false,
-            midtoken_sleep_ms: 500,
+            midtoken_sleep_ms: if speed == "fast" { 0 } else { 500 },
             current_promx: composite_prompt.clone(),
             generated_text: String::new(),
             cancel_token: cancel_tx,
@@ -528,13 +529,13 @@ pub async fn update_weights(
     api_key: String,
     model: String,
 ) -> Result<(), String> {
-    // Set is_mixing = true
+    // Set is_mixing = true if session is active
     {
         let mut guard = session.0.lock().await;
-        match *guard {
-            Some(ref mut s) => s.is_mixing = true,
-            None => return Err("No active session".to_string()),
+        if let Some(ref mut s) = *guard {
+            s.is_mixing = true;
         }
+        // If None, we proceed to allow mixing even without an active session
     }
 
     let _ = app.emit(
@@ -577,7 +578,7 @@ pub async fn update_weights(
         }
     };
 
-    // Update session with new prompt
+    // Update session with new prompt if active
     {
         let mut guard = session.0.lock().await;
         if let Some(ref mut s) = *guard {
