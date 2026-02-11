@@ -174,12 +174,11 @@ body.dither-enabled {
   width: 100%;
   min-width: 0;
   background: var(--nc-black);
-  color: var(--nc-panel-text);
+  color: var(--nc-bright-white);
   border: var(--nc-line) solid var(--nc-border);
   padding: var(--nc-pad-sm) var(--nc-pad-md);
   font-family: inherit;
   font-size: inherit;
-  text-transform: uppercase;
   box-sizing: border-box;
   border-radius: 0;
 }
