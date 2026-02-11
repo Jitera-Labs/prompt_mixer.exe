@@ -37,3 +37,6 @@ test-results/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.tsbuildinfo
+
+# Local
+local/
