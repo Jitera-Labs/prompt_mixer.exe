@@ -30,8 +30,8 @@ export function WelcomePage() {
   };
 
   return (
-    <div className="nc-screen">
-      <div className="nc-center nc-welcome-center">
+    <div className="h-full overflow-hidden">
+      <div className="nc-center nc-welcome-center h-full flex items-center justify-center">
         <div className="nc-panel nc-welcome-panel">
         <div className="nc-header nc-welcome-header">
           <div>
