@@ -87,9 +87,27 @@ export function ChatArea() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom
+  const isAtBottomRef = useRef(true);
+
+  const handleScroll = useCallback(() => {
+    if (scrollContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+      const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
+      isAtBottomRef.current = isAtBottom;
+    }
+  }, []);
+
+  // Force scroll to bottom when chat changes
   useEffect(() => {
     if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+      isAtBottomRef.current = true;
+    }
+  }, [activeChatId]);
+
+  // Auto-scroll to bottom only if we're already close to the bottom
+  useEffect(() => {
+    if (scrollContainerRef.current && isAtBottomRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
     }
   }, [messages, streamingContent, error]);
@@ -101,6 +119,7 @@ export function ChatArea() {
       <div className="flex-grow flex flex-col overflow-hidden relative">
         <div
           ref={scrollContainerRef}
+          onScroll={handleScroll}
           className="flex-grow nc-scroll overflow-y-auto p-2 text-xl leading-relaxed flex flex-col gap-4"
         >
           {!activeChatId ? (
