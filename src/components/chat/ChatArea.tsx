@@ -96,7 +96,7 @@ export function ChatArea() {
 
   return (
     <div className="nc-panel h-full relative flex flex-col overflow-visible" style={{ padding: 0 }}>
-      <div className="nc-header" style={{ marginTop: '-14px' }}>TERMINAL</div>
+      <div className="nc-header">TERMINAL</div>
 
       <div className="flex-grow flex flex-col overflow-hidden relative">
         <div
