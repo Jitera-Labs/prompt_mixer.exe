@@ -257,7 +257,7 @@ export function MixerCanvas() {
       dragStateRef.current = newState;
       animStateRef.current.isDraggingHandle = false;
       animStateRef.current.draggedAnchor = null;
-Ref.current
+
       // Provide immediate feedback on release if we were dragging
       if (wasInteracting) {
         useMixerStore.getState().setStatus('Mixing');

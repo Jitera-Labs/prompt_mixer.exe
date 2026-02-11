@@ -19,8 +19,8 @@ interface SettingsState {
   theme: 'dark' | 'light';
 
   // Performance settings (all default to false for better performance)
-  enableCRTEffect: true,
-  enableDitherFilter: false,
+  enableCRTEffect: boolean;
+  enableDitherFilter: boolean;
 
   // UI State
   isSettingsOpen: boolean;
