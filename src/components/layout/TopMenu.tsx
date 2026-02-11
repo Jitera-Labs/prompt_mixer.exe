@@ -48,7 +48,7 @@ const TopMenu: React.FC = () => {
         <filter id="dither" colorInterpolationFilters="sRGB" x="0" y="0" width="100%" height="100%">
           <feImage width="4" height="4" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAASElEQVR42gXBgQAAIAxFwW8QwhBCCCGEIYQQQgghhBBCCEMYwutOkphzYmbsvdG9l9YaEYG7o1or5xxKKay1UGYyxuC9R++dD7yGJkTj6F0HAAAAAElFTkSuQmCC" result="pattern" />
           <feTile in="pattern" result="pattern" />
-          <feComposite operator="arithmetic" k1="0" k2="1" k3="1" k4="-0.5" in="SourceGraphic" in2="pattern" />
+          <feComposite operator="arithmetic" k1="2" k2="1" k3="1" k4="-0.5" in="SourceGraphic" in2="pattern" />
           <feComponentTransfer>
             <feFuncR type="discrete" tableValues="0 1"/>
             <feFuncG type="discrete" tableValues="0 1"/>
@@ -73,21 +73,21 @@ const TopMenu: React.FC = () => {
         {/* Window Controls (TUI Style) */}
         <div className="flex gap-2 font-bold font-mono text-xl ml-2 text-[#c0c0c0]">
           <button
-            className="hover:text-white px-1 transition-colors"
+            className="nc-window-control px-1 transition-colors"
             onClick={handleMinimize}
             title="Minimize"
           >
             [_]
           </button>
           <button
-            className="hover:text-white px-1 transition-colors"
+            className="nc-window-control px-1 transition-colors"
             onClick={handleMaximize}
             title={isMaximized ? "Restore" : "Maximize"}
           >
             {isMaximized ? '[^]' : '[□]'}
           </button>
           <button
-            className="hover:text-white px-1 transition-colors"
+            className="nc-window-control px-1 transition-colors"
             onClick={handleClose}
             title="Close"
           >
