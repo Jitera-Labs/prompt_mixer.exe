@@ -8,6 +8,7 @@ interface MixerState {
   anchors: Anchor[];
   handlePos: { x: number; y: number };
   targetHandlePos: { x: number; y: number };
+  canvasSize: { width: number; height: number };
   emotionValues: EmotionValues;
 
   // Session state
@@ -23,6 +24,7 @@ interface MixerState {
 
   // Actions
   initAnchors: (canvasWidth: number, canvasHeight: number) => void;
+  setCanvasSize: (width: number, height: number) => void;
   setHandlePos: (x: number, y: number) => void;
   updateEmotionValues: (values: EmotionValues) => void;
   setStatus: (status: MixerStatus) => void;
@@ -60,6 +62,7 @@ export const useMixerStore = create<MixerState>((set, get) => ({
   anchors: [],
   handlePos: { x: -1, y: -1 },
   targetHandlePos: { x: -1, y: -1 },
+  canvasSize: { width: 0, height: 0 },
   emotionValues: {},
   status: '',
   isPaused: false,
@@ -70,6 +73,7 @@ export const useMixerStore = create<MixerState>((set, get) => ({
   view: 'canvas',
 
   initAnchors: (canvasWidth: number, canvasHeight: number) => {
+    set({ canvasSize: { width: canvasWidth, height: canvasHeight } });
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
     const nonNeutral = DEFAULT_ANCHORS.filter(a => !a.isNeutral);
@@ -105,6 +109,10 @@ export const useMixerStore = create<MixerState>((set, get) => ({
       handlePos: { x: centerX, y: centerY },
       targetHandlePos: { x: centerX, y: centerY },
     });
+  },
+
+  setCanvasSize: (width: number, height: number) => {
+    set({ canvasSize: { width, height } });
   },
 
   setHandlePos: (x: number, y: number) => {
@@ -186,22 +194,46 @@ export const useMixerStore = create<MixerState>((set, get) => ({
 
   loadPresetAnchors: async (presetId: number) => {
     const presetAnchors = await api.getPresetAnchors(presetId);
-    // Convert PresetAnchor[] to Anchor[] — positions will be recalculated by canvas
-    const anchors: Anchor[] = presetAnchors.map(pa => ({
-      name: pa.label,
-      iconSmall: pa.icon_small,
-      iconLarge: pa.icon_large,
-      color: pa.color,
-      isNeutral: pa.label === 'Neutral',
-      prompt: pa.prompt,
-      x: pa.position_x,
-      y: pa.position_y,
-      targetX: pa.position_x,
-      targetY: pa.position_y,
-      displayX: pa.position_x,
-      displayY: pa.position_y,
-      D_influence: pa.influence_radius,
-    }));
+
+    // Check if anchors have uninitialized positions (0,0)
+    const needsLayout = presetAnchors.length > 0 && presetAnchors.every(pa => pa.position_x === 0 && pa.position_y === 0);
+    const { canvasSize } = get();
+
+    // Use stored dimensions or defaults
+    const canvasW = canvasSize.width || 600;
+    const canvasH = canvasSize.height || 400;
+    const centerX = canvasW / 2;
+    const centerY = canvasH / 2;
+    const placementRadius = Math.min(centerX, centerY) * CANVAS_CONSTANTS.PLACEMENT_RADIUS_FACTOR;
+
+    // Convert PresetAnchor[] to Anchor[]
+    const anchors: Anchor[] = presetAnchors.map((pa, i) => {
+      let x = pa.position_x;
+      let y = pa.position_y;
+
+      if (needsLayout) {
+        // Lay out in a circle/diamond if uninitialized
+        const angle = (i / presetAnchors.length) * 2 * Math.PI - (Math.PI / 2); // Start at top
+        x = centerX + placementRadius * Math.cos(angle);
+        y = centerY + placementRadius * Math.sin(angle);
+      }
+
+      return {
+        name: pa.label,
+        iconSmall: pa.icon_small,
+        iconLarge: pa.icon_large,
+        color: pa.color,
+        isNeutral: pa.label === 'Neutral',
+        prompt: pa.prompt,
+        x,
+        y,
+        targetX: x,
+        targetY: y,
+        displayX: x,
+        displayY: y,
+        D_influence: pa.influence_radius,
+      };
+    });
     set({ anchors, activePresetId: presetId });
     get().saveSession().catch(console.error);
   },
@@ -277,15 +309,17 @@ export const useMixerStore = create<MixerState>((set, get) => ({
   },
 
   addAnchor: (anchor: { label: string; prompt: string; iconSmall: string; iconLarge: string; color: string }) => {
-    const { anchors } = get();
+    const { anchors, canvasSize } = get();
     // Calculate position: place at a reasonable spot on the circle
-    // Estimate canvas size from existing anchors
-    const xs = anchors.map(a => a.x);
-    const ys = anchors.map(a => a.y);
-    const centerX = (Math.min(...xs) + Math.max(...xs)) / 2;
-    const centerY = (Math.min(...ys) + Math.max(...ys)) / 2;
+
+    // Use stored canvas dimensions if available, otherwise estimate
+    const canvasW = canvasSize.width || 600;
+    const canvasH = canvasSize.height || 400;
+    const centerX = canvasW / 2;
+    const centerY = canvasH / 2;
+
     const placementRadius = Math.min(centerX, centerY) * CANVAS_CONSTANTS.PLACEMENT_RADIUS_FACTOR;
-    const influenceRadius = anchors[0]?.D_influence || 100;
+    const influenceRadius = anchors[0]?.D_influence || Math.min(canvasW, canvasH) * CANVAS_CONSTANTS.INFLUENCE_RADIUS_FACTOR;
 
     const nonNeutralCount = anchors.filter(a => !a.isNeutral).length + 1;
     const angle = ((nonNeutralCount - 1) / nonNeutralCount) * 2 * Math.PI;
@@ -332,16 +366,16 @@ export const useMixerStore = create<MixerState>((set, get) => ({
   },
 
   resetPositions: () => {
-    const { anchors } = get();
+    const { anchors, canvasSize } = get();
     if (anchors.length === 0) return;
-    // Estimate canvas dimensions from current anchor positions
-    const xs = anchors.map(a => a.x);
-    const ys = anchors.map(a => a.y);
-    const centerX = (Math.min(...xs) + Math.max(...xs)) / 2;
-    const centerY = (Math.min(...ys) + Math.max(...ys)) / 2;
-    const canvasW = centerX * 2 || 600;
-    const canvasH = centerY * 2 || 400;
-    const placementRadius = Math.min(canvasW / 2, canvasH / 2) * CANVAS_CONSTANTS.PLACEMENT_RADIUS_FACTOR;
+
+    // Use stored canvas dimensions if available, otherwise estimate
+    const canvasW = canvasSize.width || 600;
+    const canvasH = canvasSize.height || 400;
+    const centerX = canvasW / 2;
+    const centerY = canvasH / 2;
+
+    const placementRadius = Math.min(centerX, centerY) * CANVAS_CONSTANTS.PLACEMENT_RADIUS_FACTOR;
     const influenceRadius = Math.min(canvasW, canvasH) * CANVAS_CONSTANTS.INFLUENCE_RADIUS_FACTOR;
 
     const nonNeutral = anchors.filter(a => !a.isNeutral);
@@ -350,12 +384,12 @@ export const useMixerStore = create<MixerState>((set, get) => ({
     const reset: Anchor[] = anchors.map(a => {
       let x: number, y: number;
       if (a.isNeutral) {
-        x = canvasW / 2;
-        y = canvasH / 2;
+        x = centerX;
+        y = centerY;
       } else {
         const angle = (nonNeutralIndex / nonNeutral.length) * 2 * Math.PI;
-        x = canvasW / 2 + placementRadius * Math.cos(angle);
-        y = canvasH / 2 + placementRadius * Math.sin(angle);
+        x = centerX + placementRadius * Math.cos(angle);
+        y = centerY + placementRadius * Math.sin(angle);
         nonNeutralIndex++;
       }
       return {
