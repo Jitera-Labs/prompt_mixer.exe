@@ -8,7 +8,6 @@ use commands::llm::SessionState;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::new().build())
-        .plugin(tauri_plugin_window_state::Builder::new().build())
         .setup(|app| {
             db::initialize(app)?;
             app.manage(SessionState::default());
