@@ -2,5 +2,14 @@
   "identifier": "default",
   "description": "Default capability for the main window",
   "windows": ["main"],
-  "permissions": ["core:default", "store:default", "window-state:default"]
+  "permissions": [
+    "core:default",
+    "store:default",
+    "window-state:default",
+    "core:window:allow-minimize",
+    "core:window:allow-maximize",
+    "core:window:allow-unmaximize",
+    "core:window:allow-start-dragging",
+    "core:window:allow-close"
+  ]
 }
