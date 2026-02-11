@@ -11,6 +11,7 @@ export function SettingsModal() {
     saveConfig,
     setTheme,
     enableCRTEffect,
+    enableDitherFilter,
     setPerformanceSetting,
     isSettingsOpen,
     setSettingsOpen
@@ -184,6 +185,14 @@ export function SettingsModal() {
             checked={enableCRTEffect}
             onChange={(checked) => setPerformanceSetting('enableCRTEffect', checked)}
             label="CRT SCANLINE EFFECT"
+          />
+        </div>
+
+        <div className="nc-field">
+          <Checkbox
+            checked={enableDitherFilter}
+            onChange={(checked) => setPerformanceSetting('enableDitherFilter', checked)}
+            label="DITHER FILTER"
           />
         </div>
 
