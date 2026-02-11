@@ -13,6 +13,7 @@ export function ChatInput() {
   const config = useSettingsStore(s => s.config);
   const getWeightedAnchors = useMixerStore(s => s.getWeightedAnchors);
   const setStatus = useMixerStore(s => s.setStatus);
+  const speed = useMixerStore(s => s.speed);
 
   // Auto-resize textarea
   useLayoutEffect(() => {
@@ -69,6 +70,7 @@ export function ChatInput() {
         providerUrl: config.providerUrl,
         apiKey: config.apiKey,
         model: config.model,
+        speed: speed,
         temperature: config.temperature,
         maxTokens: config.maxTokens,
         topP: config.topP,
