@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSettingsStore } from './stores/settingsStore';
 import { useMixerStore } from './stores/mixerStore';
 import { AppLayout } from './layouts/AppLayout';
+import TopMenu from './components/layout/TopMenu';
 import { WelcomePage } from './pages/WelcomePage';
 import { PresetsPage } from './pages/PresetsPage';
 import { ToastContainer } from './components/ui/Toast';
@@ -39,12 +40,19 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Routes>
-          <Route path="/welcome" element={<WelcomePage />} />
-          <Route path="/app" element={<AppLayout />} />
-          <Route path="/presets" element={<PresetsPage />} />
-          <Route path="*" element={<Navigate to={isConfigured ? "/app" : "/welcome"} replace />} />
-        </Routes>
+        <div className="flex flex-col h-screen w-screen overflow-hidden bg-[var(--nc-black)] border-2 border-[#808080] box-border">
+          <div className="shrink-0 z-50">
+            <TopMenu />
+          </div>
+          <div className="flex-1 overflow-hidden relative">
+            <Routes>
+              <Route path="/welcome" element={<WelcomePage />} />
+              <Route path="/app" element={<AppLayout />} />
+              <Route path="/presets" element={<PresetsPage />} />
+              <Route path="*" element={<Navigate to={isConfigured ? "/app" : "/welcome"} replace />} />
+            </Routes>
+          </div>
+        </div>
         <CRTEffect />
         <ToastContainer />
       </BrowserRouter>
