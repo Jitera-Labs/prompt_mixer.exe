@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback, useMemo } from 'react';
+import { listen } from '@tauri-apps/api/event';
 import { useMixerStore } from '../../stores/mixerStore';
 import { useSettingsStore } from '../../stores/settingsStore';
 import { CANVAS_CONSTANTS, DEFAULT_ANCHORS } from '../../lib/constants';
@@ -39,7 +40,18 @@ export function MixerCanvas() {
   const updateEmotionValues = useMixerStore(s => s.updateEmotionValues);
   const activePresetId = useMixerStore(s => s.activePresetId);
   const anchors = useMixerStore(s => s.anchors);
+  const setStatus = useMixerStore(s => s.setStatus);
   const { config, theme } = useSettingsStore();
+
+  // Listen for backend status events
+  useEffect(() => {
+    const unlisten = listen<{ status: string }>('llm:status', (event) => {
+      setStatus(event.payload.status as any);
+    });
+    return () => {
+      unlisten.then(f => f());
+    };
+  }, [setStatus]);
 
   // Sync canvas state when store anchors change (e.g. reset, preset load)
   useEffect(() => {
@@ -51,23 +63,41 @@ export function MixerCanvas() {
     }
   }, [anchors]);
 
-  // Debounced weight update to backend
-  const debouncedUpdateWeights = useMemo(
-    () => debounce((values: Record<string, number>) => {
-      const weighted = anchorsRef.current
-        .filter(a => (values[a.name] || 0) > 0)
-        .map(a => ({ label: a.name, prompt: a.prompt, weight: values[a.name] || 0 }));
+// Perform weight update to backend
+  const performUpdateWeights = useCallback(async (values: Record<string, number>) => {
+    const weighted = anchorsRef.current
+      .filter(a => (values[a.name] || 0) > 0)
+      .map(a => ({ label: a.name, prompt: a.prompt, weight: values[a.name] || 0 }));
 
-      if (weighted.length > 0 && config.providerUrl) {
-        api.updateWeights({
+    if (weighted.length > 0 && config.providerUrl) {
+      const { setStatus, setConnectionStatus } = useMixerStore.getState();
+
+      try {
+        await api.updateWeights({
           anchors: weighted,
           providerUrl: config.providerUrl,
           apiKey: config.apiKey,
           model: config.model,
-        }).catch(console.error);
+        });
+        // Success
+        setStatus('Done');
+        setConnectionStatus('connected');
+      } catch (error) {
+        console.error('Mixing failed:', error);
+        setStatus(''); // Reset status
+        setConnectionStatus('error');
       }
+    }
+  }, [config]);
+
+  // Debounced weight update
+  const debouncedUpdateWeights = useMemo(
+    () => debounce((values: Record<string, number>) => {
+       const { setStatus } = useMixerStore.getState();
+       setStatus('Mixing'); // Show mixing status when debounce fires
+       performUpdateWeights(values);
     }, 500),
-    [config]
+    [performUpdateWeights]
   );
 
   // Refs to avoid stale closures in the canvas event handlers
@@ -75,6 +105,11 @@ export function MixerCanvas() {
   useEffect(() => {
     updateWeightsRef.current = debouncedUpdateWeights;
   }, [debouncedUpdateWeights]);
+
+  const performUpdateWeightsRef = useRef(performUpdateWeights);
+  useEffect(() => {
+    performUpdateWeightsRef.current = performUpdateWeights;
+  }, [performUpdateWeights]);
 
   const updateEmotionValuesRef = useRef(updateEmotionValues);
   useEffect(() => {
@@ -105,6 +140,9 @@ export function MixerCanvas() {
 
       canvas.width = newWidth;
       canvas.height = newHeight;
+
+      // Update store with canvas dimensions so actions like resetPositions work correctly
+      useMixerStore.getState().setCanvasSize(newWidth, newHeight);
 
       // Restore retro context settings lost on resize
       setupRetroCanvas(ctx, canvas);
@@ -212,9 +250,20 @@ export function MixerCanvas() {
 
     const onMouseUp = () => {
       const newState = processMouseUp(canvas);
+
+      // Determine if we were actually interacting
+      const wasInteracting = dragStateRef.current.isDraggingHandle || dragStateRef.current.draggedAnchor;
+
       dragStateRef.current = newState;
       animStateRef.current.isDraggingHandle = false;
       animStateRef.current.draggedAnchor = null;
+Ref.current
+      // Provide immediate feedback on release if we were dragging
+      if (wasInteracting) {
+        useMixerStore.getState().setStatus('Mixing');
+        // Immediate update to capture user intent before spring-back logic resets weights
+        performUpdateWeights({...valuesRef.current});
+      }
 
       // Persist handle position and anchors to store matching store persistence
       const { x, y } = animStateRef.current.handlePos;
@@ -281,7 +330,10 @@ export function MixerCanvas() {
           updateEmotionValuesRef.current({ ...valuesRef.current });
           lastStoreUpdateRef.current = currentTime;
         }
-        updateWeightsRef.current({ ...valuesRef.current });
+        // Only trigger debounced updates if actively dragging, preventing settled physics from delaying updates
+        if (state.isDraggingHandle || state.draggedAnchor) {
+           updateWeightsRef.current({ ...valuesRef.current });
+        }
       }
 
       draw(ctx, canvas, anchorsRef.current, state.handlePos, valuesRef.current, state.draggedAnchor, state.deltaTime, theme);
@@ -304,7 +356,6 @@ export function MixerCanvas() {
   return (
     <div ref={containerRef} className="mixer-canvas relative w-full h-full">
       <canvas ref={canvasRef} className="w-full h-full" />
-      <MixerStatus />
       <ConnectionIndicator />
     </div>
   );
