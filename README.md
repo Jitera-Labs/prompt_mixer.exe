@@ -7,3 +7,28 @@
 
 ---
 
+An environment to explore mid-generation prompt steering.
+
+## [FEATURES]
+
+![feature image](./assets/mixer_core.png)
+
+A canvas to mix individual components of the prompt together. Each component is represented as an anchor. Drag and drop to position them. Distance to the center represents weight in the resulting mix.
+
+![feature image](./assets/chat_core.png)
+
+Minimalistic chat interface to interact with the model. Regen, edit messages. Pause and resume generation, slow it down for better control.
+
+![feature image](./assets/settings_core.png)
+
+Point to any OpenAI-compatible endpoint with your API key. All data is stored locally in an encrypted vault.
+
+## [INITIATION_SEQUENCE]
+
+```bash
+# INSTALL_DEPENDENCIES
+npm install
+
+# EXECUTE_PROGRAM
+npm run tauri dev
+```

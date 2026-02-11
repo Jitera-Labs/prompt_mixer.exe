@@ -522,6 +522,7 @@ input[type="range"]::-moz-range-thumb {
 
 .nc-window-control {
   color: var(--nc-bright-white);
+  cursor: pointer;
 }
 
 .nc-window-control:hover {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Mixer</title>
+    <title>Prompt Mixer - Landing</title>
     <style>
         @font-face {
             font-family: 'Geist Pixel';
@@ -12,25 +12,165 @@
             font-style: normal;
         }
 
+        :root {
+            --nc-bg: #000000;
+            --nc-cyan: #00AAAA;
+            --nc-yellow: #FFFF55;
+            --nc-white: #AAAAAA;
+            --nc-bright-white: #FFFFFF;
+        }
+
         body {
-            background-color: black;
-            color: white;
+            background-color: var(--nc-bg);
+            color: var(--nc-white);
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            padding: 40px;
             font-family: 'Geist Pixel', monospace;
+            text-transform: uppercase;
         }
 
         .container {
-            font-size: 96px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        h1 {
+            color: var(--nc-bright-white);
+            font-size: 72px;
             letter-spacing: -0.04em;
+            margin: 0;
+            border-bottom: 4px double var(--nc-bright-white);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: var(--nc-cyan);
+            font-size: 24px;
+            margin-bottom: 60px;
+        }
+
+        .section {
+            border: 2px solid var(--nc-bright-white);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid var(--nc-white);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            color: var(--nc-yellow);
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .section-desc {
+            font-size: 18px;
+            line-height: 1.5;
+            max-width: 600px;
+            color: var(--nc-white);
+        }
+
+        .placeholder {
+            width: 100%;
+            height: 500px;
+            border: 2px dashed var(--nc-cyan);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: var(--nc-cyan);
+            background-color: rgba(0, 170, 170, 0.1);
+            position: relative;
+        }
+
+        .placeholder img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .badge {
+            background-color: var(--nc-cyan);
+            color: black;
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            color: var(--nc-white);
+            border-top: 1px solid var(--nc-white);
+            padding-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">prompt_mixer.exe</div>
+    <div class="container">
+        <header>
+            <h1>PROMPT_MIXER.EXE</h1>
+            <div class="subtitle">
+                > Brutalist LLM Operations Environment <span class="blink">_</span>
+            </div>
+        </header>
+
+        <!-- SECTION 1: CORE CHAT -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">CHAT_CORE</div>
+                <div class="badge">STATUS: ONLINE</div>
+            </div>
+            <div class="section-desc">
+                Minimalist chat interface for prompt steering.
+            </div>
+            <div class="placeholder">
+                <img src="chat.png" />
+            </div>
+        </div>
+
+        <!-- SECTION 2: MIXER -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">MIXER_CANVAS</div>
+                <div class="badge">STATUS: ACTIVE</div>
+            </div>
+            <div class="section-desc">
+                2D pane for composing prompt out of individual components. Distance to anchor represents weight.
+            </div>
+            <div class="placeholder">
+                <img src="mixer.png" />
+            </div>
+        </div>
+
+        <!-- SECTION 3: SYSTEM -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">SYSTEM_CONFIG</div>
+                <div class="badge">SECURE_MODE</div>
+            </div>
+            <div class="section-desc">
+                None of the data leaves your system. Bring your own LLM.
+            </div>
+            <div class="placeholder">
+                <img src="settings.png" />
+            </div>
+        </div>
+
+        <footer>
+            PROMPT_MIXER // END OF FILE
+        </footer>
+    </div>
 </body>
 </html>
