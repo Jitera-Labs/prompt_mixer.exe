@@ -53,7 +53,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
 
   return (
     <div className="nc-panel h-full flex flex-col overflow-visible relative" style={{ padding: 0 }}>
-      <div className="nc-header" style={{ marginTop: '-14px' }}>HISTORY</div>
+      <div className="nc-header">HISTORY</div>
       {onToggle && (
         <button
           onClick={onToggle}
