@@ -115,7 +115,7 @@ export function PresetsPage() {
   const isEditing = editingIndex !== null || addingAnchor;
 
   return (
-    <div className="nc-screen h-screen w-screen flex flex-col overflow-hidden p-2">
+    <div className="h-full w-full flex flex-col overflow-hidden p-2">
       <div className="nc-panel flex-grow flex flex-col overflow-hidden relative">
         <div className="nc-header">ANCHORS_AND_PRESETS</div>
 
