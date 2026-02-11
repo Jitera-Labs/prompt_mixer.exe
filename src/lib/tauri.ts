@@ -34,6 +34,7 @@ export const startMixingSession = (params: {
   providerUrl: string;
   apiKey: string;
   model: string;
+  speed: string;
   temperature: number;
   maxTokens: number;
   topP: number;
