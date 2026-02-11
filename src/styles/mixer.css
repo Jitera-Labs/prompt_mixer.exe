@@ -24,9 +24,16 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 12px;
-  height: 12px;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1;
   background-color: var(--nc-gray);
+  color: var(--nc-bg);
   transition: all 0.3s ease;
   z-index: 1000;
 }
@@ -35,9 +42,13 @@
   background-color: var(--nc-cyan);
 }
 
+.connection-indicator.busy {
+  background-color: var(--nc-yellow);
+  color: var(--nc-blue);
+}
 
 .connection-indicator.error {
-  background-color: var(--nc-yellow);
+  background-color: #FF5555;
 }
 
 /* Presets View - NC Style */
