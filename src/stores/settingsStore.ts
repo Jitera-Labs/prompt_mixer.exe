@@ -20,6 +20,7 @@ interface SettingsState {
 
   // Performance settings (all default to false for better performance)
   enableCRTEffect: boolean;
+  enableDitherFilter: boolean;
 
   // UI State
   isSettingsOpen: boolean;
@@ -28,7 +29,7 @@ interface SettingsState {
   loadSettings: () => Promise<void>;
   saveConfig: (config: LLMConfig) => Promise<void>;
   setTheme: (theme: 'dark' | 'light') => Promise<void>;
-  setPerformanceSetting: (key: 'enableCRTEffect', value: boolean) => Promise<void>;
+  setPerformanceSetting: (key: 'enableCRTEffect' | 'enableDitherFilter', value: boolean) => Promise<void>;
   setSettingsOpen: (open: boolean) => void;
   toggleSettings: () => void;
   checkIsConfigured: () => boolean;
@@ -41,6 +42,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
   // Performance settings - all default to false for optimal performance
   enableCRTEffect: false,
+  enableDitherFilter: false,
 
   // UI State
   isSettingsOpen: false,
@@ -59,6 +61,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
       // Load performance settings
       const enableCRTEffect = await api.getSetting('enable_crt_effect');
+      const enableDitherFilter = await api.getSetting('enable_dither_filter');
 
       const config: LLMConfig = {
         providerUrl: providerUrl || '',
@@ -76,6 +79,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         isConfigured,
         theme: (theme as 'dark' | 'light') || 'dark',
         enableCRTEffect: enableCRTEffect === 'true',
+        enableDitherFilter: enableDitherFilter === 'true',
       });
     } catch (e) {
       console.error('Failed to load settings:', e);
@@ -102,10 +106,11 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     document.documentElement.classList.toggle('light', theme === 'light');
   },
 
-  setPerformanceSetting: async (key: 'enableCRTEffect', value: boolean) => {
+  setPerformanceSetting: async (key: 'enableCRTEffect' | 'enableDitherFilter', value: boolean) => {
     // Map the setting key to the storage key
     const storageKeyMap = {
       enableCRTEffect: 'enable_crt_effect',
+      enableDitherFilter: 'enable_dither_filter',
     };
 
     await api.setSetting(storageKeyMap[key], value.toString());
