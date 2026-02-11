@@ -112,10 +112,6 @@ export function ModelSelector({
           <select
             value={models.includes(model) ? model : ''}
             onChange={e => {
-              if (e.target.value === '__manual__') {
-                setManualMode(true);
-                return;
-              }
               onChange(e.target.value);
             }}
             className="nc-select w-full cursor-pointer"
@@ -132,7 +128,6 @@ export function ModelSelector({
                 {m}
               </option>
             ))}
-            <option value="__manual__">✎ Enter manually…</option>
           </select>
           <span
             className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none font-bold"
