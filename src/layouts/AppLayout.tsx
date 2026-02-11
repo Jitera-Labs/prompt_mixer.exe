@@ -7,7 +7,6 @@ import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useSettingsStore } from '../stores/settingsStore';
 import { SettingsModal } from '../components/settings/SettingsModal';
 import FunctionBar from '../components/layout/FunctionBar';
-import TopMenu from '../components/layout/TopMenu';
 
 export function AppLayout() {
   const navigate = useNavigate();
@@ -44,11 +43,12 @@ export function AppLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="nc-screen h-screen w-screen overflow-hidden flex flex-col">
+    <div className="h-full w-full overflow-hidden flex flex-col box-border">
+
       <div
         className="flex-grow grid gap-2 px-[var(--nc-pad-sm)] pb-[var(--nc-pad-sm)] pt-2 bg-[var(--nc-black)] min-h-0"
         style={{
-          gridTemplateColumns: isSidebarOpen ? '260px 450px 1fr' : '50px 450px 1fr',
+          gridTemplateColumns: isSidebarOpen ? '260px 550px 1fr' : '50px 550px 1fr',
           gridTemplateRows: '1fr',
           transition: 'all 0.3s ease',
         }}
