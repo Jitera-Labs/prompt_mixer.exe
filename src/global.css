@@ -34,7 +34,7 @@
   --nc-yellow: #AA0000;
   --nc-white: #333333;
   --nc-bright-white: #000000;
-  --nc-black: #FFFFFF;
+  --nc-black: #dddddd;
   --nc-gray: #888888;
   --nc-border: var(--nc-bright-white);
   --nc-panel-bg: var(--nc-black);
@@ -63,6 +63,7 @@ body {
   font-family: 'Geist Pixel', monospace;
   font-size: 18px;
   text-transform: uppercase;
+  filter: url(#dither);
 }
 
 /* Selection */
@@ -76,19 +77,15 @@ body {
   background: var(--nc-panel-bg);
   border: 4px double var(--nc-border);
   padding: 16px;
-  position: relative;
 }
 
 .nc-header {
   background: var(--nc-panel-bg);
   color: var(--nc-yellow);
   padding: 4px 12px;
-  margin-top: -24px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+  margin: 0 auto;
+  margin-top: 0.5rem;
   border: 2px solid var(--nc-border);
-  width: fit-content;
   z-index: 10;
 }
 
@@ -442,6 +439,15 @@ body {
   animation: crt-scan-move 0.3s linear infinite !important;
   pointer-events: none;
   will-change: transform;
+}
+
+[data-theme="light"] .crt-scanline::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 50%
+  );
+  background-size: 100% 4px;
 }
 
 /* Custom Range Input Styling */
