@@ -20,7 +20,6 @@ export function ModelSelector({
   const [models, setModels] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [manualMode, setManualMode] = useState(false);
   const fetchedFor = useRef<string>('');
 
   const doFetch = useCallback(async () => {
@@ -40,16 +39,10 @@ export function ModelSelector({
       const result = await fetchModels(url, key);
       setModels(result);
       fetchedFor.current = cacheKey;
-      if (result.length > 0) {
-        setManualMode(false);
-      } else {
-        setManualMode(true);
-      }
     } catch (e: any) {
       console.warn('Failed to fetch models:', e);
       setError(typeof e === 'string' ? e : e?.message || 'Failed to fetch models');
       setModels([]);
-      setManualMode(true);
     } finally {
       setLoading(false);
     }
@@ -72,38 +65,11 @@ export function ModelSelector({
     doFetch();
   };
 
-  // Manual input fallback
-  if (manualMode && models.length === 0) {
-    return (
-      <div className={className}>
-        <div className="flex gap-3">
-          <input
-            type="text"
-            value={model}
-            onChange={e => onChange(e.target.value)}
-            placeholder="e.g. gpt-4o-mini"
-            className="nc-input flex-1"
-          />
-          <button
-            type="button"
-            onClick={handleRefresh}
-            disabled={loading || !providerUrl.trim() || !apiKey.trim()}
-            title="Retry fetching models"
-            className="nc-button"
-            style={{ width: '42px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
-            <span className={loading ? 'animate-pulse' : ''}>[R]</span>
-          </button>
-        </div>
-        {error && (
-          <p className="flex items-center gap-2 mt-2 text-sm" style={{ color: 'var(--nc-warn)' }}>
-            <span className="font-bold">[!]</span>
-            Could not load models — enter manually
-          </p>
-        )}
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (models.length > 0 && model && !models.includes(model)) {
+      onChange('');
+    }
+  }, [models, model, onChange]);
 
   return (
     <div className={className}>
@@ -117,12 +83,12 @@ export function ModelSelector({
             className="nc-select w-full cursor-pointer"
           >
             {loading && <option value="">Loading models…</option>}
-            {!loading && !models.includes(model) && model && (
-              <option value="" disabled>
-                {model} (not in list)
-              </option>
+            {!loading && models.length === 0 && (
+              <option value="">API conection required</option>
             )}
-            {!loading && !model && <option value="">Select a model</option>}
+            {!loading && models.length > 0 && !model && (
+              <option value="">Select a model</option>
+            )}
             {models.map(m => (
               <option key={m} value={m}>
                 {m}
@@ -147,9 +113,9 @@ export function ModelSelector({
           <span className={loading ? 'animate-pulse' : ''}>[R]</span>
         </button>
       </div>
-      {!loading && !models.includes(model) && model && (
-        <p className="mt-2 text-sm">
-          Currently set to "{model}" — select from dropdown or switch to manual entry
+      {error && (
+        <p className="mt-2 text-sm" style={{ color: 'var(--nc-warn)' }}>
+          Could not load models from API
         </p>
       )}
     </div>
