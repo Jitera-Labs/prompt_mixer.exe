@@ -63,6 +63,9 @@ body {
   font-family: 'Geist Pixel', monospace;
   font-size: 18px;
   text-transform: uppercase;
+}
+
+body.dither-enabled {
   filter: url(#dither);
 }
 
@@ -515,4 +518,12 @@ input[type="range"]::-moz-range-thumb {
   margin-left: auto !important;
   margin-right: auto !important;
   margin-bottom: var(--nc-pad-lg);
+}
+
+.nc-window-control {
+  color: var(--nc-bright-white);
+}
+
+.nc-window-control:hover {
+  color: var(--nc-yellow);
 }
