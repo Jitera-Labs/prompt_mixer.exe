@@ -210,6 +210,80 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
     Ok(())
 }
 
+fn seed_tones_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
+    let exists: bool = conn.query_row(
+        "SELECT EXISTS(SELECT 1 FROM anchor_presets WHERE name = 'Tones')",
+        [],
+        |row| row.get(0),
+    ).unwrap_or(false);
+
+    if exists {
+        return Ok(());
+    }
+
+    let now = now_iso();
+    conn.execute(
+        "INSERT INTO anchor_presets (name, created_at, updated_at) VALUES (?1, ?2, ?3)",
+        rusqlite::params![&"Tones", &now, &now],
+    )?;
+
+    let preset_id = conn.last_insert_rowid();
+
+    let anchors: &[(&str, &str, &str, &str, &str, i32)] = &[
+        (
+            "Concise",
+            ">|<",
+            "  |  \n >|< \n  |  ",
+            "#32CD32",
+            "Be extremely concise. Give direct answers with no fluff. Use bullet points where possible. Focus on efficiency and clarity.",
+            0
+        ),
+        (
+            "Detailed",
+            "≡",
+            "┌───┐\n│---│\n│---│\n└───┘",
+            "#4169E1",
+            "Provide comprehensive and detailed explanations. Explore nuances, background context, and related concepts. Be thorough and exhaustive.",
+            1
+        ),
+        (
+            "Creative",
+            "~",
+            " (  \n(~) \n )  ",
+            "#9370DB",
+            "Think outside the box. Use metaphors, analogies, and evocative language. Be unconventional, artistic, and inspire imagination.",
+            2
+        ),
+        (
+            "Formal",
+            "{}",
+            " / \\ \n{ # }\n \\ / ",
+            "#708090",
+            "Maintain a strictly professional and formal tone. Use precise terminology. Be objective, logical, and structured. Avoid colloquialisms.",
+            3
+        )
+    ];
+
+    let mut stmt = conn.prepare(
+        "INSERT INTO preset_anchors (preset_id, label, icon_small, icon_large, color, prompt, position_x, position_y, influence_radius, sort_order)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, 0.0, 0.0, 0.35, ?7)",
+    )?;
+
+    for &(label, icon_small, icon_large, color, prompt, sort_order) in anchors {
+         stmt.execute(rusqlite::params![
+            preset_id,
+            label,
+            icon_small,
+            icon_large,
+            color,
+            prompt,
+            sort_order,
+        ])?;
+    }
+
+    Ok(())
+}
+
 fn fix_default_preset_icons(conn: &Connection) -> Result<(), rusqlite::Error> {
     // Check if we need to fix icons (if any emoji exists in preset 1)
     let has_emojis: bool = conn.query_row(
@@ -337,6 +411,7 @@ pub fn initialize(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     create_tables(&conn)?;
     migrate_schema(&conn)?;
     seed_default_preset(&conn)?;
+    seed_tones_preset(&conn)?;
     // Fix emoji icons in default preset if they exist
     fix_default_preset_icons(&conn)?;
 
