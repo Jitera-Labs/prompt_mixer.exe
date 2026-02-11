@@ -19,8 +19,8 @@ interface SettingsState {
   theme: 'dark' | 'light';
 
   // Performance settings (all default to false for better performance)
-  enableCRTEffect: boolean;
-  enableDitherFilter: boolean;
+  enableCRTEffect: true,
+  enableDitherFilter: false,
 
   // UI State
   isSettingsOpen: boolean;
@@ -41,7 +41,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   theme: 'dark',
 
   // Performance settings - all default to false for optimal performance
-  enableCRTEffect: false,
+  enableCRTEffect: true,
   enableDitherFilter: false,
 
   // UI State
@@ -78,7 +78,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         config,
         isConfigured,
         theme: (theme as 'dark' | 'light') || 'dark',
-        enableCRTEffect: enableCRTEffect === 'true',
+        enableCRTEffect: enableCRTEffect === null ? true : enableCRTEffect === 'true',
         enableDitherFilter: enableDitherFilter === 'true',
       });
     } catch (e) {
