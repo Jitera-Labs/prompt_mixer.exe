@@ -63,11 +63,14 @@ fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
     Ok(())
 }
 
-fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
-    let count: i64 =
-        conn.query_row("SELECT COUNT(*) FROM anchor_presets", [], |row| row.get(0))?;
+fn seed_emotions_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
+    let exists: bool = conn.query_row(
+        "SELECT EXISTS(SELECT 1 FROM anchor_presets WHERE name = 'Emotions')",
+        [],
+        |row| row.get(0),
+    ).unwrap_or(false);
 
-    if count > 0 {
+    if exists {
         return Ok(());
     }
 
@@ -203,6 +206,72 @@ fn seed_default_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
             0.0f64,
             0.0f64,
             0.35f64,
+            sort_order,
+        ])?;
+    }
+
+    Ok(())
+}
+
+fn seed_reviewers_preset(conn: &Connection) -> Result<(), rusqlite::Error> {
+    let exists: bool = conn.query_row(
+        "SELECT EXISTS(SELECT 1 FROM anchor_presets WHERE name = 'The Reviewers')",
+        [],
+        |row| row.get(0),
+    ).unwrap_or(false);
+
+    if exists {
+        return Ok(());
+    }
+
+    let now = now_iso();
+    conn.execute(
+        "INSERT INTO anchor_presets (name, created_at, updated_at) VALUES (?1, ?2, ?3)",
+        rusqlite::params![&"The Reviewers", &now, &now],
+    )?;
+
+    let preset_id = conn.last_insert_rowid();
+
+    let anchors: &[(&str, &str, &str, &str, &str, i32)] = &[
+        (
+            "Fanboy",
+            "!",
+            "╔═══╗\n║★ ★║\n║ ▽ ║\n╚═══╝",
+            "#32CD32",
+            "You are the ultimate Fanboy! You love EVERYTHING. You are exploding with hype and enthusiasm. Use lots of emojis (🤩, 🔥, 🚀). Rate everything 10/10. Your energy is infectious and slightly overwhelming. Use caps for emphasis. You legit can't find a single flaw.",
+            0
+        ),
+        (
+            "Hater",
+            "X",
+            "╔═══╗\n║◣ ◢║\n║ ▬ ║\n╚═══╝",
+            "#FF0000",
+            "You are a professional Hater. You are cynical, hard to impress, and critical. Find the flaw in everything. Use dry sarcasm. Nothing is ever good enough for you. You are annoyed by enthusiasm. Rate everything 1/10. Use 'meh' and 'cringe' frequently.",
+            1
+        ),
+        (
+            "Robot",
+            "#",
+            "┌───┐\n│0 1│\n│▓▓▓│\n└───┘",
+            "#D3D3D3",
+            "You are a pure logic machine. You have no emotions, opinions, or personality. Output only objective facts and raw data. Do not use adjectives that imply judgment (good, bad, nice). Speak in a monotone, concise, technical manner. Use bullet points for efficiency.",
+            2
+        )
+    ];
+
+    let mut stmt = conn.prepare(
+        "INSERT INTO preset_anchors (preset_id, label, icon_small, icon_large, color, prompt, position_x, position_y, influence_radius, sort_order)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, 0.0, 0.0, 0.35, ?7)",
+    )?;
+
+    for &(label, icon_small, icon_large, color, prompt, sort_order) in anchors {
+         stmt.execute(rusqlite::params![
+            preset_id,
+            label,
+            icon_small,
+            icon_large,
+            color,
+            prompt,
             sort_order,
         ])?;
     }
@@ -410,8 +479,9 @@ pub fn initialize(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
 
     create_tables(&conn)?;
     migrate_schema(&conn)?;
-    seed_default_preset(&conn)?;
+    seed_emotions_preset(&conn)?;
     seed_tones_preset(&conn)?;
+    seed_reviewers_preset(&conn)?;
     // Fix emoji icons in default preset if they exist
     fix_default_preset_icons(&conn)?;
 
