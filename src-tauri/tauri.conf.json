@@ -12,13 +12,17 @@
   "app": {
     "windows": [
       {
-        "title": "Prompt Mixer",
+        "title": "",
         "width": 1200,
         "height": 800,
         "minWidth": 800,
         "minHeight": 600,
         "center": true,
-        "decorations": true
+        "decorations": false,
+        "hiddenTitle": true,
+        "closable": false,
+        "minimizable": false,
+        "maximizable": false
       }
     ]
   },
